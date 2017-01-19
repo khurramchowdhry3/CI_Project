@@ -1,3 +1,0 @@
-Hi {!Program__c.OwnerFirstName},
-
-Your Program {!Program__c.Name} is going to an end on  {!Program__c.End_Date__c}.

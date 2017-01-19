@@ -1,5 +1,0 @@
-Hi, 
-Operation {!Operation__c.Name} related to {!Operation__c.Account__c} 
-is Ready for processing from your team.
-For Disbursal:  {!Operation__c.OrgBaseURL__c}/apex/Loan_DisbursalSummary?ID={!Operation__c.Id}
-Thank You.

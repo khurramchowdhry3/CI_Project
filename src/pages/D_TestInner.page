@@ -1,6 +1,0 @@
-<apex:page controller="D_TestMainController" extensions="D_TestInnerController" >
-    <apex:outputText value="{!istr.Event_Amount__c}"></apex:outputText>
-    <apex:form >
-    <apex:inputText value="{!istr.Event_Amount__c}"/>
-        </apex:form>
-</apex:page>

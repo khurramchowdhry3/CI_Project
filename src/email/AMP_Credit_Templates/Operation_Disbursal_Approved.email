@@ -1,5 +1,0 @@
-Hi, 
-Operation {!Operation__c.Name} related to {!Operation__c.Account__c} 
-was Disbursed.
-{!Operation__c.Link}
-Thank You.

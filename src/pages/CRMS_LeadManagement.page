@@ -1,6 +1,0 @@
-<apex:page standardController="Lead" extensions="CRMS_LeadManagementController">
-<!-- extensions="CRMS_LeadManagementController" -->
-    <flow:interview name="New_Lead_Flow" interview="{!myflow}" buttonLocation="bottom" finishLocation="{!finishLocation}"> 
-        <apex:param name="LeadId" value="{!Lead.Id}"/>
-    </flow:interview> <!-- finishLocation="/{!Lead.Id}"  -->
-</apex:page>

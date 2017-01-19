@@ -1,5 +1,0 @@
-<apex:page controller="AMP_LoanProgram">
-  <apex:form >
-      <apex:commandButton value="Run" action="{!CheckProgramValidty}"/>
-  </apex:form>
-</apex:page>

@@ -1,6 +1,0 @@
-Hi,
-Additional info was requested before Disbursal 
-on Operation {!Operation__c.Name} 
-related to  {!Operation__c.Account__c} .
-{!Operation__c.Link}
-Thank You.

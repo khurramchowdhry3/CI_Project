@@ -1,3 +1,0 @@
-<apex:page standardController="Credit_Assessment__c">
-  <apex:detail subject="{!Credit_Assessment__c.Id}" relatedList="true" inlineEdit="true" />
-</apex:page>

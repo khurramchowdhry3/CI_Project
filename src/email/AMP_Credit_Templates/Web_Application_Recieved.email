@@ -1,3 +1,0 @@
-We have received a new web application from {!Opportunity.Primary_Contact__c}; {!Opportunity.Name}.
-
-To view the details of this application in Salesforce, please click on the following link: {!Opportunity.Link}.

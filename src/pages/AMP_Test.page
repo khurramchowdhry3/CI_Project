@@ -1,4 +1,0 @@
-<apex:page >
-<!-- controller="AMP_Test"  action="{!DeleteOrphanCreditAssesments}">
-    <apex:outputText value="{!OprphansSize}"></apex:outputText>-->
-</apex:page>
