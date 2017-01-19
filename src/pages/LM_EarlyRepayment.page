@@ -1,0 +1,53 @@
+<apex:page controller="LM_LoanDetails_Controller" extensions="LM_EarlyRepayment_Controller">
+      
+    <apex:stylesheet value="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+    <apex:includeScript value="//code.jquery.com/jquery-1.10.2.js"/>
+    <apex:includeScript value="//code.jquery.com/ui/1.11.4/jquery-ui.js"/>
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"/>
+    <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/LMDashboard_Events.css')}"/>
+    
+    <apex:form >
+        <apex:outputPanel styleClass="eventPanel">
+            <apex:pageBlock mode="mainDetail" rendered="{!lme!=null}">
+                <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Proposed Repayment Date" styleClass="bold"/>
+                    </apex:pageBlockSectionItem>  
+                     <apex:pageBlockSectionItem >
+                        <apex:outputText value="Payment Received" styleClass="bold"/>
+                    </apex:pageBlockSectionItem> 
+                    <apex:pageBlockSectionItem >
+                        <apex:inputText value="{!lme.Event_Date__c}" styleClass="EventDatePicker" style="width:80%;" disabled="{!lme.Event_Date__c!=null}" rendered="{!lme.Event_Date__c=null}" />
+                        <apex:outputField value="{!lme.Event_Date__c}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:inputCheckbox value="{!lme.Payment_Received__c}" disabled="{!lme.Event_Date__c=null}" />
+                    </apex:pageBlockSectionItem>
+                  
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            <apex:pageMessages />
+        </apex:outputPanel>
+        <apex:outputPanel styleClass="eventProcessPanel">        
+            <!--<c:LM_EventProcessor lmEvent="{!lme}"></c:LM_EventProcessor>-->
+        </apex:outputPanel>    
+    </apex:form>
+    
+    <script type="text/javascript">           
+        $(".EventDatePicker").datepicker({
+            showOn: "both",
+            buttonImage: "https://storage.googleapis.com/material-icons/external-assets/v2/icons/svg/ic_today_black_24px.svg",
+            buttonImageOnly: true,
+            buttonText: "Select date",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            minDate:  {!EventStartFrom} + 0,
+            beforeShowDay: $.datepicker.noWeekends,
+            firstDay: 1 
+        });
+    </script>
+    
+</apex:page>

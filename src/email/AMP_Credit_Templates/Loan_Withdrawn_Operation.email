@@ -1,0 +1,11 @@
+Hi,
+
+Loan has been withdrawn for {!Operation__c.Opportunity__c}. 
+
+Following are the loan details: 
+
+1. Loan Amount : {!Operation__c.Loan_Amount__c}
+2. Loan Term : {!Operation__c.Loan_Term__c}
+3. Operation : {!Operation__c.Name} 
+
+Thank you

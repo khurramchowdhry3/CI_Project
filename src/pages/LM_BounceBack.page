@@ -1,0 +1,36 @@
+<apex:page controller="LM_LoanDetails_Controller" extensions="LM_BounceBack_Controller">
+    <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/LMDashboard_Events.css')}"/>
+    
+    <apex:form >
+        <apex:outputPanel styleClass="eventPanel">
+            <apex:pageBlock mode="mainDetail" rendered="{!lme!=null}">
+                <apex:pageBlockSection columns="3">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Bounce Back Amount" styleClass="bold"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Bounce Back Date" styleClass="bold"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Repayment Method" styleClass="bold"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputField value="{!lme.Event_Amount__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputField value="{!lme.Event_Date__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:selectList value="{!lme.Event_Process_Method__c}" size="1">
+                        <apex:selectOptions value="{!EventProcessMethods}"/>
+                    </apex:selectList>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            <apex:pageMessages />
+        </apex:outputPanel>
+        <apex:outputPanel styleClass="eventProcessPanel" rendered="{!lme!=null}">        
+            <c:LM_EventProcessor lmEvent="{!lme}"></c:LM_EventProcessor>
+        </apex:outputPanel>    
+    </apex:form>
+</apex:page>

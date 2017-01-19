@@ -1,0 +1,57 @@
+<apex:component controller="LM_Cancellation_Controller">
+    <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/LMDashboard_Events.css')}"/>
+    <apex:attribute name="pageControllerAttr" description="The parent controller" type="PageControllerBase" required="true" assignTo="{!pageController}" />
+    <apex:outputPanel >
+        <apex:pageBlock mode="mainDetail" rendered="{!lme!=null}">
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem labelStyle="width:20%;">
+                    <apex:outputText value="Effective Date" styleClass="bold"/>
+                    <apex:outputText value="{0, date, dd/MM/yyyy}" >
+                        <apex:param value="{!lme.Effective_Date__c}"/>
+                    </apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Principal" styleClass="bold"/>
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!cr.PrincipalAmount}"/>
+                    </apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Fee" styleClass="bold"/>
+                    <apex:outputText value="{!AccummulatedFees}" id="txtAccummulatedFees"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Cancellation Fee" styleClass="bold"/>
+                    <apex:outputPanel layout="inline">
+                        <apex:outputPanel layout="block" style="width: 25%; float:left;">
+                    		<apex:outputText value="{!CancellationFee}" id="txtCancellationFee" style="{!IF(lme.Waive_Fee__c, 'text-decoration: line-through;', '')}"/>
+                        </apex:outputPanel>
+                        <apex:actionRegion >
+                            <apex:inputCheckbox value="{!lme.Waive_Fee__c}">
+                                <apex:actionSupport event="onchange" reRender="txtTotal,txtCancellationFee"/>
+                            </apex:inputCheckbox>
+                        </apex:actionRegion>
+                        <apex:outputText value="Waive" styleClass="bold"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>                
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Total" styleClass="bold"/>
+                    <apex:outputText value="{0, number, ##,##0.00}" id="txtTotal">
+                        <apex:param value="{!CancellationTotal}"/>
+                    </apex:outputText>
+                </apex:pageBlockSectionItem>                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Loan_Management_Event__c.fields.Payment_Received__c.Label}"/>
+                    <c:RequiredContainer fieldName="Payment Received">
+                    	<apex:inputField value="{!lme.Payment_Received__c}"/>
+    				</c:RequiredContainer>                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Reason" styleClass="bold"/>
+                    <apex:inputTextarea value="{!lme.Notes__c}" cols="60" rows="6"/>
+                </apex:pageBlockSectionItem>             
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageMessage severity="info" strength="2" summary="{!infoMessage}" rendered="{!len(infoMessage)>0}"/>
+    </apex:outputPanel>
+</apex:component>

@@ -1,0 +1,45 @@
+<apex:page controller="AMPSyncApp_QueueController" sidebar="false" showHeader="true" readOnly="true" standardStylesheets="false" id="pgqueue">
+    
+    <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'ajax-loader.css')}"/>
+    <apex:stylesheet value="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+    <apex:stylesheet value="https://cdn.datatables.net/1.10.12/css/dataTables.jqueryui.min.css"/>
+    <apex:includeScript value="https://code.jquery.com/jquery-2.1.4.min.js"/>
+    <apex:includeScript value="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    <apex:includeScript value="https://cdn.datatables.net/1.10.12/js/dataTables.jqueryui.min.js"/>
+     
+    <apex:dataTable value="{!ListOfQueueMembers}" var="Queue" id="syncqueuelistview">        
+        <apex:column headerValue="Queue Number">
+            <apex:outputLink value="/{!Queue.Id}">{!Queue.Name}</apex:outputLink>
+        </apex:column>
+        <apex:column headerValue="Object Name" value="{!Queue.Object_Name_Link__c}"/>
+        <apex:column headerValue="DML Operation" value="{!Queue.DML_Operation__c}"/>
+        <apex:column headerValue="Status" value="{!Queue.Status__c}"/>
+        <apex:column headerValue="Pending Reason" value="{!Queue.Sync_Failure_Reason__c}"/>
+        <apex:column headerValue="Last Sync DateTime" value="{!Queue.Last_Sync_DateTime__c}"/>
+        <apex:column headerValue="Action">               
+           <apex:outputLink value="javascript:fncpendingrecords('{!Queue.Id}')" rendered="{!IF(Queue.Status__c == 'Pending',true,false)}" styleClass="btn" style="text-decoration:none; padding: 3px;">Sync</apex:outputLink>
+        </apex:column>
+    </apex:dataTable>
+    <apex:form id="frmqueuemembers">
+        <apex:actionFunction action="{!syncPendingRecord}" name="fncpendingrecords" reRender="pgqueue" status="loader" oncomplete="javascript:location.reload();" >
+            <apex:param name="qid" value="" assignTo="{!SelectedRecordToSync}"/>
+        </apex:actionFunction>
+    </apex:form>
+    <apex:actionStatus id="loader" >
+       <apex:facet name="start">           
+           <div class="overlay overlay-fixed"/>
+           <div class="pgloading pgloading-background">                   
+               <div class="pgloading-loader" />                  
+           </div>
+           <span class="sync-text">Syncing...</span>          
+       </apex:facet>
+   </apex:actionStatus>    
+    
+    <script>
+        $(document).ready(function(){
+            $("[id$=syncqueuelistview]").DataTable({
+                "pageLength": 25               
+            });            
+        });
+    </script>
+</apex:page>

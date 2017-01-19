@@ -1,0 +1,15 @@
+Hi,
+<br/><br/>
+The Credit Team requires additional information to progress application
+ reference {!Opportunity.Name} <br/>
+<br/>
+Please arrange for the following documents to be submitted:<br/>
+
+<br/>
+Additional Information Details: {!Opportunity.Additional_Information_Details__c}
+<br/> 
+Additional Information Narrative: {!Opportunity.Additional_Information_Narrative__c}
+
+<br/>
+<br/>
+Thank you

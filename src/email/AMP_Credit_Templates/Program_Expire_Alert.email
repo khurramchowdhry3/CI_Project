@@ -1,0 +1,6 @@
+Hi {!Program__c.OwnerFirstName},
+
+The following program assigned to you, {!Program__c.Name} is due to expire on {!Program__c.End_Date__c}. Please take appropriate action.
+
+Many thanks,
+System Administrator

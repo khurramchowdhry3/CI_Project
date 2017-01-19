@@ -1,0 +1,43 @@
+<html>
+<head>
+<style>
+p {
+   font-size: 13px;
+   font-family: Arial;
+}
+
+li {
+   font-size: 13px;
+   font-family: Arial;
+}
+</style>
+</head>
+<body>
+<p>Dear {!Account.Salutation} {!Account.FirstName} {!Account.LastName}, </p>
+<p><b>YOUR APPLICATION DOCUMENTS - {!Opportunity.Application_ID2__c} </b></p>
+
+<p>Thank you for taking the time to complete your loan application over the telephone with me. I am delighted that we can help you with your financial planning.</p>
+<p>You will receive a separate email from Amplifi Capital, via DocuSign, which contains a link to your Application Form. The details you provided have been used to complete the application form.</p>
+<p><b>What you need to do next:</b></p>
+<p>To complete the application, please send:</p>
+<ol>
+<li value="1">Reply to this email and attach the following documents: 
+<ol type="a">
+<li>3 Months of Business Bank Statements</li>
+<li>Proof of Residence</li>
+<li>Proof of Identity</li>
+<li>Rental Slip</li>
+<li>3 Months of Merchant Statements</li>
+</ol>
+</li>
+<li>Follow the link in the separate email from DocuSign which will take you to your Application Form.</li>
+<li>Ensure the information on the Application Form is correct. Follow the instructions on the Application Form and sign it.</li>
+</ol>
+<p>Once the application form is signed, it will be automatically sent to Amplifi Capital.</p>
+<p>If you have any questions, or if you find that any of your details are not correct, please call me on (852) 2541 3138.</p>
+<p>I look forward to receiving your documents. </p>
+<p>Yours sincerely, </p>
+<p>{!Opportunity.OwnerFullName} <br/>
+New Loans Manager</p>
+</body>
+</html>

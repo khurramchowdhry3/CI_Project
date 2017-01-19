@@ -1,0 +1,11 @@
+Hi,
+
+Loan has been withdrawn for {!Credit_Assessment__c.Opportunity__c}.
+
+Following are the loan details:
+
+1. Loan Amount : {!Credit_Assessment__c.Approved_Loan_Amount__c}
+2. Loan Term : {!Credit_Assessment__c.Approved_Loan_Term__c}
+3. Credit Assessment : {!Credit_Assessment__c.Name}
+
+Thank you

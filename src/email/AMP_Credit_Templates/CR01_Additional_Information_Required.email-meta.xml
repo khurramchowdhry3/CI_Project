@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Additional Information Required by Credit Team</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>CR01 Additional Information Required</name>
+    <style>none</style>
+    <subject>Additional Information Required</subject>
+    <textOnly>The Credit Team requires additional information to progress application reference {!Credit_Assessment__c.Opportunity__c}
+
+Please arrange for the following documents to be submitted:
+
+Additional Information Details: {!Opportunity.Additional_Information_Details__c}
+Additional Information Narrative: {!Opportunity.Additional_Information_Narrative__c}
+
+Thank You.</textOnly>
+    <type>custom</type>
+</EmailTemplate>

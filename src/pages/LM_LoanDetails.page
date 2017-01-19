@@ -1,0 +1,246 @@
+<apex:page controller="LM_LoanDetails_Controller" tabStyle="Loan_Management_Rev__tab" docType="html-5.0"  >
+     <apex:includeScript value="https://code.jquery.com/jquery-3.1.0.min.js"/>
+     <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/LMDashboard.css')}"/>
+     <apex:includeScript value="{!URLFOR($Resource.AMP_LoanManagment, 'css/fancybox/source/jquery.fancybox.js')}"/>
+     <apex:includeScript value="{!URLFOR($Resource.AMP_LoanManagment, 'js/jquery.svgDoughnutChart.js')}"/>
+     <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/fancybox/source/jquery.fancybox.css')}"/>
+     <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/LMDashboard_Events.css')}"/>     
+    
+    <style>
+        h1 {
+            color: #000;
+            font-size: 2em;
+            font-weight: normal;
+            margin-bottom: 0;
+            margin-top: 9px;
+            float: left;
+            padding-left: 7px;
+            vertical-align: middle;
+            padding: 15px 0 15px;               
+        }
+        
+        .bPageBlock .pbBody .data2Col,
+        .bPageBlock .pbBody .labelCol { border-bottom: 0px; }
+    </style>
+    
+    <h1><apex:outputLink value="/{!o.Account__r.Id}" target="_blank" style="text-decoration: none;">{!o.Account__r.Name}</apex:outputLink></h1> 
+    
+            
+    <apex:form >
+        <apex:panelGrid columns="2" width="100%" styleClass="pgTop" >
+            
+            <apex:pageBlock id="pgbLoanDetails"  >
+                <apex:pageBlockSection title="Loan Details" columns="2">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Program__c.fields.Name.Label}" />
+                        <apex:outputField value="{!o.Program_Product_ASO__r.Program_Name__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Operation__c.fields.Loan_Disbursed_Date__c.Label}" />
+                        <apex:outputField value="{!o.Loan_Disbursed_Date__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Product2.fields.Name.Label}" />
+                        <apex:outputField value="{!o.Program_Product_ASO__r.Product_Name__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Operation__c.fields.First_Repayment_Date__c.Label}" />
+                        <apex:outputField value="{!o.First_Repayment_Date__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Operation__c.fields.Loan_Amount__c.Label}" />
+                        <apex:outputField value="{!o.Loan_Amount__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$Label.Operation_Total_Disbursed_Amount}" />
+                        <apex:outputText value="{0, number, ##,##0.00}">
+                            <apex:param value="{!IF(TotalDisbursed  == null,0,TotalDisbursed )}"/>
+                        </apex:outputText>                        
+                    </apex:pageBlockSectionItem>                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$Label.Operation_Original_Instalement}" />
+                        <apex:outputText value="{0, number, ##,##0.00}">
+                            <apex:param value="{!o.Repayment_Per_Installment__c}"/>
+                        </apex:outputText>
+                    </apex:pageBlockSectionItem> 
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Operation__c.fields.Monthly_Interest__c.Label}" />
+                        <apex:outputField value="{!o.Monthly_Interest__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!IF(rules.Documentary_Stamp_Tax__c!= null, true, false)}">
+                        <apex:outputLabel value="DST" />
+                        <apex:outputText value="{!rules.Documentary_Stamp_Tax__c}%"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!IF(rules.Value_Added_Tax__c != null, true, false)}">
+                        <apex:outputText value="VAT" />
+                        <apex:outputText value="{!rules.Value_Added_Tax__c}%"/>                                              
+                    </apex:pageBlockSectionItem>                                              
+                                   
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        
+        
+            <apex:pageBlock id="pgbCurrentStatus">
+                <apex:pageBlockSection title="Current Status" columns="2">
+                    <apex:pageBlockSectionItem >
+                        <div id="principal" style="margin-left:14px;"></div>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >                        
+                        <div id="interest" style="margin-left:10px;"></div>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Operation__c.fields.Status__c.Label}" />
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="{!o.Status__c}"/>
+                            <apex:commandButton value="Write Off" action="{!WriteOffLoan}" style="margin-left: 10px;padding-top: 1px;padding-bottom: 1px;margin-top: 0px;margin-bottom: 0px;" rendered="{!o.Status__c == 'Defaulted'}" />
+                        	<apex:commandButton value="Resume" action="{!ResumeLoan}" style="margin-left: 10px;padding-top: 1px;padding-bottom: 1px;margin-top: 0px;margin-bottom: 0px;" rendered="{!AND(o.Status__c == 'Paused', IsResumeActive == true)}" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Operation__c.fields.Final_Repayment_Date__c.Label}" />
+                        <apex:outputField value="{!o.Final_Repayment_Date__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Remaining Repayments" />
+                        <apex:outputText value="{!o.Remaining_Number_of_Repayments__c} / {!o.Actual_Number_of_Repayments__c}"/>                        
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Operation__c.fields.No_Bounce_Backs__c.Label}" />
+                        <apex:outputField value="{!o.No_Bounce_Backs__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Accumulated Fees" />
+                        <apex:outputPanel layout="block">
+                            <apex:outputText value="{!AccummulatedFees}"/>
+                            <apex:commandButton value="Waive" action="{!WaiveAccummulatedFees}" style="margin-left: 10px;" rendered="{!o.Outstanding_Fees__c != null && o.Outstanding_Fees__c > 0}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="# Available Payment Holidays" />
+                        <apex:outputText value="{!VALUE(rules.Max_number_of_payment_holidays__c) - o.Number_Payment_Holidays__c}"/>
+                    </apex:pageBlockSectionItem>                                       
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!$Label.Operation_Installment}" />
+                        <apex:outputText value="{0, number, ##,##0.00}">
+                            <apex:param value="{!o.Actual_Repayment_Per_Installment__c}"/>
+                        </apex:outputText>                        
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText />
+                        <apex:outputLink value="javascript:void(0);" style="color:blue;" onclick="Popup('/apex/LMS_LoanSchedule');">View Schedule</apex:outputLink>                        
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem />
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText />
+                        <apex:outputLink value="javascript:void(0);" style="color:blue;" onclick="Popup('/apex/LMS_LoanLedger');">View Ledger</apex:outputLink>                        
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>
+                    
+                </apex:pageBlockSection>
+            </apex:pageBlock>        
+            
+        </apex:panelGrid>                
+    </apex:form>
+    <apex:repeat value="{!ListLMEvents}" var="e">
+        <c:LM_EventViewPanel lmEvent="{!e}" />
+    </apex:repeat>
+    <apex:include id="lmPageContainer"  pageName="LM_EventProcessor" rendered="{!EventTypePageVisibility}"/>
+    <br/>
+    <br />
+    <apex:form rendered="{!o.Loan_Management_Events__r.size > 0}">
+        <apex:pageBlock title="Event History">
+            <apex:pageBlockTable value="{!o.Loan_Management_Events__r}" var="e">
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:outputText value="Event Type"/>
+                    </apex:facet>
+                    <apex:commandLink action="{!URLFOR($Action.Loan_Management_Event__c.View, e.Id)}" value="{!e.Event_Type__c}"/>
+                </apex:column>
+                <apex:column value="{!e.Event_Date__c}"/>
+                <apex:column value="{!e.Effective_Date__c}" />
+                <apex:column value="{!e.Event_Amount__c}"/>
+                <apex:column value="{!e.IsApproved__c}"/>
+                <apex:column value="{!e.Approval_Date__c}"/>
+                <apex:column value="{!e.ApprovedBy__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+    
+    
+    
+    <script>
+        
+        $(document).ready(function(){        
+                       
+            var lheight = $("[id$=pgbLoanDetails]").height();
+            var rheight = $("[id$=pgbCurrentStatus]").height();
+            
+            if (lheight > rheight)
+                $("[id$=pgbCurrentStatus]").height(lheight);
+            else
+                $("[id$=pgbLoanDetails]").height(rheight);          
+              
+        });
+        
+        function Popup(URL){                                  
+           $.fancybox.open({
+                openEffect  : 'elastic',
+                closeEffect : 'elastic',
+                openSpeed : 'normal',
+                closeSpeed : 'normal',                            
+                href   : URL + "?id={!$CurrentPage.parameters.Id}",
+                type   : 'iframe',
+                width  : 1250,
+                height : 620,                    
+                padding : 0,
+                scrolling : 'auto',
+                fitToView   : false,
+                autoSize    : false
+            });                      
+        }
+        
+        
+        var principal_repaid  = "{!(o.Actual_Principal_Amount__c - o.Loan_Outstanding_Principal__c)}";
+        var principal_outstanding = "{!o.Loan_Outstanding_Principal__c}";
+        var principal_percen = (principal_repaid /"{!o.Loan_Amount__c}")*100;
+        
+        var interest_repaid = "{!(o.Actual_Interest_Amount__c - o.Loan_Outstanding_Interest__c)}";
+        var interest_outstanding = "{!o.Loan_Outstanding_Interest__c}";
+        var interest_percen = (interest_repaid / "{!o.Actual_Interest_Amount__c}")*100;
+       
+                
+        $('#principal').doughnutChart({
+            positiveColor: "#78C953",
+            negativeColor: "#0B6FCE",
+            backgroundColor: "white",
+            percentage: Math.round(principal_percen.toFixed(2)),
+            size: 100,
+            doughnutSize: 0.30,
+            innerText: Math.round(principal_percen.toFixed(2))+"%",
+            innerTextOffset: 12,
+            Title: "Principal",
+            positiveText: principal_repaid+" Repaid",
+            negativeText: principal_outstanding + " Outstanding"
+        });
+        
+        $('#interest').doughnutChart({
+            positiveColor: "#78C953",
+            negativeColor: "#0B6FCE",
+            backgroundColor: "white",
+            percentage: Math.round(interest_percen.toFixed(2)),
+            size: 100,
+            doughnutSize: 0.30,
+            innerText: Math.round(interest_percen.toFixed(2))+"%",
+            innerTextOffset: 12,
+            Title: "Interest",
+            positiveText: interest_repaid+" Repaid",
+            negativeText: interest_outstanding + " Outstanding"
+        });      
+        
+        
+    </script>
+</apex:page>

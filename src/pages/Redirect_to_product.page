@@ -1,0 +1,2 @@
+<apex:page standardController="Program_Product_ASO__c" extensions="Loan_Program_Product_Redirect" action="{!RedirectToProductView}">  
+</apex:page>

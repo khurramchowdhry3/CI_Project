@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>support@crmsuperstars.com</contactEmail>
+    <ipRanges>
+        <end>195.160.235.254</end>
+        <start>195.160.232.1</start>
+    </ipRanges>
+    <ipRanges>
+        <end>5.2.198.35</end>
+        <start>5.2.198.35</start>
+    </ipRanges>
+    <label>Data Warehouse</label>
+    <oauthConfig>
+        <callbackUrl>https://ap1.salesforce.com/services/oauth2/token</callbackUrl>
+        <consumerKey>3MVG9od6vNol.eBj_PiCPfZDoHVETwxDjlpj14LiA_P7gS_lEffHb7s1oD057gyQQszN5Tm8aRRblKSJQwRFh</consumerKey>
+        <scopes>Full</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+</ConnectedApp>

@@ -1,0 +1,11 @@
+<apex:page controller="VF_ForTest_Controller">
+    <apex:form >
+        <apex:selectList value="{!selectedValue}" size="1" required="true" id="sl">
+			<apex:selectOption itemValue="" itemLabel="None"></apex:selectOption>            
+            <apex:selectOption itemValue="1" itemLabel="One"></apex:selectOption>
+            <apex:selectOption itemValue="2" itemLabel="Two"></apex:selectOption>            
+        </apex:selectList>
+        <apex:inputField value="{!lme.Event_Type__c}" required="true"/>
+        <apex:commandButton value="Click" action="{!testAction}"/>
+    </apex:form>
+</apex:page>

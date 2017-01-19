@@ -1,0 +1,59 @@
+<apex:page controller="LM_LoanDetails_Controller" extensions="LM_Restructure_Controller" showHeader="false" sidebar="false" docType="html-5.0">
+   
+    <apex:stylesheet value="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>    
+    <apex:includeScript value="//code.jquery.com/ui/1.11.4/jquery-ui.js"/>
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"/>
+    <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/LMDashboard_Events.css')}"/>
+        
+    <apex:form >
+        <apex:outputPanel styleClass="eventPanel" rendered="{!LoanManagementEvent != null}">
+            <apex:pageBlock mode="mainDetail" >
+                <apex:pageBlockSection columns="3">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Proposed Restructure Date" styleClass="bold"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Restructure Amount" styleClass="bold"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Number of Payments" styleClass="bold"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >                        
+                        <apex:outputPanel styleclass="hideCurrDate">
+                            <apex:inputField type="text" value="{!LoanManagementEvent.Event_Date__c}" styleClass="EventDatePicker" style="width:83%;" required="true"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:inputField value="{!LoanManagementEvent.Event_Amount__c}" required="true"/>                        
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:selectList value="{!LoanManagementEvent.Event_Loan_Term__c}" size="1" required="true">
+                            <apex:selectOptions value="{!LoanTerms}"></apex:selectOptions>
+                        </apex:selectList>                        
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            <apex:pageMessages />            
+        </apex:outputPanel>
+        <apex:outputPanel styleClass="eventProcessPanel">        
+           <!-- <c:LM_EventProcessor lmEvent="{!LoanManagementEvent}"></c:LM_EventProcessor>-->
+        </apex:outputPanel>    
+    </apex:form>
+    
+     <script type="text/javascript">           
+        $(".EventDatePicker").datepicker({
+            showOn: "both",
+            buttonImage: "https://storage.googleapis.com/material-icons/external-assets/v2/icons/svg/ic_today_black_24px.svg",
+            buttonImageOnly: true,
+            buttonText: "Select date",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            minDate:  {!EventStartFrom} + 0,
+            beforeShowDay: $.datepicker.noWeekends,
+            firstDay: 1 
+        });
+    </script>
+</apex:page>

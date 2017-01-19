@@ -1,0 +1,349 @@
+<apex:page standardController="Credit_Assessment__c" extensions="CRMS_CreditAssessmentController" sidebar="false" showHeader="false" cache="false">
+    <style>
+        
+        table {
+        border-collapse: collapse;
+        float:left;
+        width:50%;
+        height:100%
+        }
+        
+        table.sectioned tbody {
+        border: 3px solid #3399ff;
+        border-collapse: separate;
+        border-spacing: 4px;
+        border-radius: 15px;
+        }
+       
+    </style>
+	<div>
+    <apex:form >
+        <table class="sectioned">
+            <thead>
+                <tr>
+                    <th >Affordability</th>                
+                                   
+                </tr>
+            </thead>
+            <tbody>
+                 <tr>
+                    <td>Income</td>
+                    <td></td>
+                    <td>% of tot income</td>
+                    <td></td>                    
+                </tr>
+                <tr>
+                    <td>Electronic daily income:</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Electronic_Daily_Income__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Electronic_Daily_Income_percentage__c}"/>
+                    </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td>Cash daily income:</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Cash_daily_income__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Cash_daily_income_percentage__c}"/>
+                    </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        Total 
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Daily_Income__c}"/>
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td>Expenditure</td>
+                    <td>                    
+                    </td>
+                    <td>% of tot income</td>
+                    <td>% of ele. income</td>
+                    
+                </tr>
+                <tr>
+                    <td>Daily repayments:</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Daily_repayments__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Pct_Daily_repayments_of_Total_income__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Pct_Daily_repayments_of_Elec_income__c}"/>
+                    </td>                    
+                </tr>
+                <tr>
+                    <td>Other fin. Commit. (Daily):</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Other_Financial_commitments_daily__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Pct_Other_Fin_comm_of_Total_income__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Pct_Other_Fin_comm_of_Elec_Income__c}"/>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td>Rental (Daily):</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Rental_daily__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Pct_Daily_Rental_of_Total_Income__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Pct_Daily_Rental_of_Elec_Income__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Total 
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Daily_Expenditure__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Pct_Expenditure_of_Total_income__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Pct_Expenditure_of_Elec_Income__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tot avail. cashflow (no Rent):</td>
+                    <td> 
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Avail_cashflow_no_rent__c}"/>
+                    </td>
+                    <td>
+                        WMA Elec. Sales:
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.WMA_Elec_sales__c}"/>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td>Tot avail. cashflow (with Rent):</td>
+                    <td> 
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Avail_cashflow_with_rent__c}"/>
+                    </td>
+                    <td>
+                        WDA Elec. Sales:
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.WDA_Elec_sales__c}"/>
+                    </td>
+                   
+                </tr> 
+                <tr>
+                    <td>Elec. avail. cashflow (no Rent):</td>
+                    <td> 
+                        <apex:outputField value="{!Credit_Assessment__c.Elec_avail_cashflow_no_rent__c}"/>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td>Elec. avail. cashflow (with Rent):</td>
+                    <td> 
+                        <apex:outputField value="{!Credit_Assessment__c.Elec_avail_cashflow_with_rent__c}"/>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                   
+                </tr>             
+            </tbody>
+        </table>
+        <table class="sectioned">
+                <thead>
+                <tr>                               
+                    <th >Key statistics &amp; Trends</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                 <tr>
+                    
+                    <td></td>
+                    <td>Benchmark</td>
+                    <td>Customer</td>
+                    <td colspan="4" rowspan="4">
+                        <apex:chart data="{!incomeDetails}" height="100%" width="100%" animate="true" legend="true">
+                            <apex:axis type="Numeric" position="left" fields="PaidInAmount,PaidOutAmount" grid="true">
+                            </apex:axis>
+                            <apex:axis type="Category" position="bottom" fields="MonthId">
+                            </apex:axis>
+                            <apex:lineSeries xField="MonthId" yField="PaidInAmount" axis="left" ></apex:lineSeries>  
+                            <apex:lineSeries xField="MonthId" yField="PaidOutAmount" axis="left" ></apex:lineSeries>
+                        </apex:chart>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td>Av. M. tot income:</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Avg_Monthly_total_income_benchmark__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Avg_Monthly_total_income__c}"/>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    
+                    <td>Costs/M. tot income:</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Costs_vs_Avg_M_income_ratio_benchmark__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Costs_Avg_Monthly_income_ratio__c}"/>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    
+                    <td></td>
+                    <td></td>
+                    <td>
+                        
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Av. income m on m % change</td>
+                    <td></td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Income_change_M1_to_M2__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Income_change_M2_to_M3__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Paid in</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Paid_In_M2__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Paid_In_M2__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Paid_In_M3__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Paid out</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Paid_Out_M1__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Paid_Out_M2__c}"/>
+                    </td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Paid_Out_M3__c}"/>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td colspan="2">Character indicators</td>
+                    <!--<td></td> -->
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    
+                    <td># of Bounce backs</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Number_of_Bounce_backs__c}"/>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    
+                    <td># Days in overdraft</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Days_in_overdraft__c}"/>
+                    </td>
+                    <td></td>
+                    <td colspan="4"></td>
+                </tr>
+                <tr>
+                    
+                    <td>% of overdraft usage</td>
+                    <td>
+                        <apex:outputField value="{!Credit_Assessment__c.Overdraft_usage_percentage__c}"/>
+                    </td>
+                    <td></td>
+                    <td colspan="4"></td>
+                </tr> 
+                <tr>
+                    
+                    <td>AML/KYC score</td>
+                    <td>                  
+                        <apex:inputField value="{!Credit_Assessment__c.AML_KYC_score__c}"/>    
+                    </td>
+                    <td></td>   
+                    <td colspan="4"></td>
+                </tr>
+                <tr>
+                    
+                    <td>CCJ main applicant</td>
+                    <td>
+                        <apex:inputField value="{!Credit_Assessment__c.CCJ_main_applicant__c}"/> 
+                    </td>
+                    <td></td>
+                    <td colspan="4"></td>
+                </tr>
+                <tr>
+                    
+                    <td>CCJ main other direct.</td>   
+                    <td>
+                        <apex:inputField value="{!Credit_Assessment__c.CCJ_main_other_direct__c}"/>
+                    </td>
+                    <td></td>    
+                    <td colspan="4"></td>
+                </tr>            
+            </tbody>
+        </table>
+    </apex:form>
+</div>
+</apex:page>

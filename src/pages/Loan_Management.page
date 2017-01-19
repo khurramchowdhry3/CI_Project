@@ -1,0 +1,1200 @@
+<apex:page controller="Loan_Management_Controller" docType="html-5.0" tabStyle="Loan_Management__tab" standardStylesheets="false">
+    <apex:stylesheet value="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+  
+     <!-- Page Header -->
+    <apex:sectionHeader title="Loan Management" />
+    
+    <apex:includeScript value="https://code.jquery.com/jquery-2.1.4.min.js"/>
+    
+    <apex:includeScript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
+    
+    <apex:stylesheet value="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+    <apex:includeScript value="//code.jquery.com/jquery-1.10.2.js"/>
+    <apex:includeScript value="//code.jquery.com/ui/1.11.4/jquery-ui.js"/>
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"/>
+   
+    
+    
+    <style>     
+        h2 {    font-size: 100%;
+                line-height: 100%;
+                margin: 0;}
+                
+       .editPage td {
+            
+            vertical-align: middle !important;}
+       
+        .editPage .hideListButton {
+            background-position: 1px -15px !important;
+        }
+        .editPage .showListButton {
+            background-position: 0px -2px !important;
+        }
+        .table thead {
+            font-weight: bold;
+        }
+        .mdl-data-table td {
+            padding-bottom: 15px;}
+        .mdl-progress {        
+            height: 10px;
+        }
+        body .bPageBlock .pbTitle {
+            display: none;
+        }
+       .bPageBlock .pbButtonb {
+            text-align: center;
+        }
+        .row2,.row3,.row3btn {
+        display:none;
+        }
+        .mdl-data-table {border:0}
+        .sectionTable {width:100%; }
+        .sectionTable td {text-align:left;}
+        .bPageBlock .dataCol {  padding:0;}  
+        .spacerTD {width:5%;}    
+        .section {display:none;}
+        label {font-weight: bold;}
+        a {text-decoration: none !important;}
+        .ui-datepicker-trigger { position: relative; vertical-align: middle; text-align: center;}
+        
+     <!--   img.helpOrb
+        {
+          vertical-align: top;
+        } -->
+        
+        <!--Bootstrap CSS Table + Progress bar -->
+          table {max-width: 100%;}                
+                th {text-align: left;}                
+                .table {width: 100%; margin-bottom: 20px;}                
+                .table > thead > tr > th,
+                .table > tbody > tr > th,
+                .table > tfoot > tr > th,
+                .table > thead > tr > td,
+                .table > tbody > tr > td,
+                .table > tfoot > tr > td {
+                    padding: 8px;                    
+                    line-height: 1.428571429;
+                    vertical-align: top;
+                    border-top: 1px solid #ddd;
+                }
+                
+                .table > thead > tr > th {
+                    vertical-align: bottom;
+                    border-bottom: 2px solid #ddd;
+                }
+                
+                .table > caption + thead > tr:first-child > th,
+                .table > colgroup + thead > tr:first-child > th,
+                .table > thead:first-child > tr:first-child > th,
+                .table > caption + thead > tr:first-child > td,
+                .table > colgroup + thead > tr:first-child > td,
+                .table > thead:first-child > tr:first-child > td {
+                    border-top: 0;
+                }
+                
+                .table > tbody + tbody {
+                    border-top: 2px solid #ddd;
+                }
+                
+                .table .table {
+                    background-color: #fff;
+                }
+                
+                .table-condensed > thead > tr > th,
+                .table-condensed > tbody > tr > th,
+                .table-condensed > tfoot > tr > th,
+                .table-condensed > thead > tr > td,
+                .table-condensed > tbody > tr > td,
+                .table-condensed > tfoot > tr > td {
+                    padding: 5px;
+                }
+                
+                .table-bordered {
+                    border: 1px solid #ddd;
+                }
+                
+                .table-bordered > thead > tr > th,
+                .table-bordered > tbody > tr > th,
+                .table-bordered > tfoot > tr > th,
+                .table-bordered > thead > tr > td,
+                .table-bordered > tbody > tr > td,
+                .table-bordered > tfoot > tr > td {
+                    border: 1px solid #ddd;
+                }
+                
+                .table-bordered > thead > tr > th,
+                .table-bordered > thead > tr > td {
+                    border-bottom-width: 2px;
+                }
+                
+                .table-striped > tbody > tr:nth-child(odd) > td,
+                .table-striped > tbody > tr:nth-child(odd) > th {
+                    background-color: #eaeaea;
+                }
+                
+                .table-hover > tbody > tr:hover > td,
+                .table-hover > tbody > tr:hover > th {
+                    background-color: #f5f5f5;
+                }
+        
+                .progress {
+                    height: 20px;
+                    margin-bottom: 20px;
+                    overflow: hidden;
+                    background-color: #f5f5f5;
+                    border-radius: 4px;
+                    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+                    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+                }
+                .progress-bar {
+                    float: left;
+                    width: 0;
+                    height: 100%;
+                    font-size: 12px;
+                    line-height: 20px;
+                    color: #fff;
+                    text-align: center;
+                    background-color: #337ab7;
+                    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+                    box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+                    -webkit-transition: width .6s ease;
+                    -o-transition: width .6s ease;
+                    transition: width .6s ease;
+        }
+    </style>
+        <apex:pageMessages />
+    <apex:form id="form">
+    <div class="editPage"> 
+        <apex:pageBlock id="pb" mode="maindetail">
+            
+        <!--
+            <table class="table"  style="width: 30%;">
+            <tr>
+                <td style="text-align: left;"><apex:outputLabel value="Select program : "> 
+                    <apex:selectList value="{!selectedProgram}" size="1" id="programName" > 
+                        <apex:selectOptions value="{!ProgramsWithLedger}" >
+                        </apex:selectOptions> 
+                    </apex:selectList>
+                </apex:outputLabel></td>
+                <td class="">
+                        <apex:commandLink action="{!getLedgerFromProgram}" >                       
+                               <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"  >
+                                   Search </button></apex:commandLink></td>
+                    <td class="spacerTD"></td>
+            </tr>
+            </table>    
+            -->
+            <apex:variable var="foo1" rendered="{!isSearchedProgramLedgers}" value="foo1" >
+            <table class="table" style="text-align:center;width:100%">                        
+                        <thead>
+                            <tr>
+                                <td>Client</td>
+                                <td>Operation</td>
+                                <td>Status</td>
+                                <td>Disbursed Amount</td>
+                                <td>Disbursed Date</td>
+                                <td>Outstanding Principal</td>
+                                <td>Daily Amount</td>
+                                <td># of Bounce Backs</td>
+                                <td>Expected Completion Days</td>
+                                <td>Action</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <apex:repeat value="{!loanList}" var="l">
+                                 <tr>
+                                    <td><a href='/{!l.Account__c}' >{!l.Account__r.Name} </a></td>
+                                    <td><a href='/{!l.LoanID__c}' >{!l.LoanID__r.Name}</a></td>
+                                    <td>{!l.LoanID__r.Status__c}</td>
+                                    <td>{!l.LoanID__r.Total_Amount_Repayable__c}</td>
+                                    <td>{!l.LoanID__r.Loan_Disbursed_Date__c}</td>
+                                    <td>{!l.Outstanding_Amount__c}</td>
+                                    <td>{!l.Total_Amount_Per_Installment__c}</td>
+                                    <td>{!l.BB_Num__c}</td>
+                                    <td>{!l.LoanEndDate__c}</td>
+                                     <td><a href='/apex/Loan_DisbursalSummary?id={!l.LoanID__c}' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" >Disbursal summary</a></td>
+           
+                                </tr>                                 
+                            </apex:repeat>    
+                        </tbody>
+            </table> 
+            </apex:variable>
+            <br/>
+            <br/>
+            <table class="table">
+                <tr style="height:75px;">
+                    <td>  
+                        <div>
+                            <apex:outputlabel for="clientID" value="Client ID " />
+                            <input value="{!clientID}"   type="text" id="clientID" />
+                        </div>  
+                    </td>
+                    <td class="spacerTD"></td>
+                    <td>  
+                        <div>
+                            <apex:outputlabel for="clientName" value="Client Name " />
+                            <input value="{!clientName}"   type="text" id="clientName" />
+                        </div>
+                    </td>
+                    <td class="spacerTD"></td>
+                    <td> 
+                        <apex:outputlabel for="screenSelected" value="Action " />
+                        <select id="screenSelected">
+                            <option value="None">--None--</option>
+                            <option value="earlyRepaymentSection">Early Repayment</option>
+                            <option value="bounceBackSection">Bounce Back</option>
+                            <option value="restructureSection">Restructure</option>
+                            <option value="paymentHolidaySection">Payment Holiday</option>
+                            <option value="debtSection">Debt Collection</option>
+                            <option value="topUpSection">Top-up</option>
+                            <option value="oneOffSection">One off</option>
+                        </select>
+                    </td>
+                    <td class="spacerTD"></td>
+                    <td>
+                        <apex:commandLink action="{!getClients}" >                       
+                               <button class="btn">Search </button></apex:commandLink>
+                    </td>
+                    <td class="spacerTD"></td>
+                    <td class="spacerTD"></td>
+                </tr>
+                
+                <apex:variable var="foo" rendered="{!isSearchedAccountLedgers}" value="foo" >
+                    <tr>
+                        <td style="font-weight:bold;">Client ID</td>
+                        <td class="spacerTD"></td>
+                        <td style="font-weight:bold;">Client Name</td>
+                        <td class="spacerTD"></td>
+                        <td style="font-weight:bold;">Action</td>
+                    </tr>
+                    <apex:repeat value="{!clientList}" var="c">
+                         <tr>
+                            <td >{!c.Client_ID__c}</td>
+                            <td class="spacerTD"></td>
+                            <td ><a href='/{!c.id}'>{!c.name}</a></td>
+                            <td class="spacerTD"></td>
+                            <td ><a href='/apex/Loan_Management?accountID={!c.id}&screenSelected={!screenSelected}' class="btn">Select</a> </td>
+                        </tr>                                 
+                    </apex:repeat>
+                </apex:variable>
+                
+            </table> 
+            
+                     
+            <br/>
+            <br/>
+            
+        </apex:pageBlock> 
+        <apex:pageBlock rendered="{!Not(ISNULL(AccountID))}" mode="maindetail">
+            
+        <apex:messages />
+             <apex:pageBlockSection title="Current status" columns="1">
+                 <table class="table" style="text-align:center;width:100%;border:0px">
+                <thead>
+                            <tr>
+                                <td>Client Name</td>
+                                <td>Loan Start Date</td>
+                                <td>Loan End Date</td>
+                                <td>Borrowed Amount</td>
+                                <td>Outstanding Amount</td>
+                                <td>Progress</td>
+                                <td>Available Payment Holidays</td>
+                                <td># of Bouce Backs</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                 <tr>
+                                    <!-- <td><a href='/{!lr.LoanID__c}' >{!lr.LoanID__r.Name}</a></td> -->
+                                    <td><a href='/{!lr.Account__c}' >{!lr.Account__r.Name} </a></td>
+                                    <td>{!loanStartDate}</td>
+                                    <td>{!loanEndDate}</td>
+                                     <td>{!Borrowed_Ammount}</td> 
+                                     <td>{!Outstanding_Amount}</td>
+                                     <td style="width:35%"><!--<div id="p1" class="mdl-progress mdl-js-progress" style="margin: 0 auto;"></div>-->                                     
+                                        <div class="progress">
+                                          <div class="progress-bar" role="progressbar"
+                                          aria-valuenow="{!lr.Progress__c}" aria-valuemin="0" aria-valuemax="100" style="width:{!lr.Progress__c}%; background-color: rgb(63,81,181);">
+                                            {!lr.Progress__c}%
+                                          </div>
+                                        </div>
+                                     </td>
+                                <td>{!lr.NumAvailablePaymentHolidays__c}</td>
+                                <td>{!lr.BB_Num__c}</td>
+                                </tr>
+                              </tbody>
+                        </table> 
+            </apex:pageBlockSection>
+
+        
+        </apex:pageBlock>
+             
+        <apex:pageBlock id="pbSections"  rendered="{!Not(ISNULL(AccountID))}" mode="maindetail">
+       <!-- EARLY REPAYMENT SECTION -->     
+        <div class='section' id="earlyRepaymentSection">
+        <apex:pageBlockSection title="Early repayment" columns="1" id="earlyRepaymentSection1">
+            <table class="sectionTable table">
+                <thead>
+                <tr>
+                    <td>Proposed Repayment Date</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><u>Final Repayment:</u></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <input type="text" id="proposedDate" readonly='true' value="{!EventStartDate}" class="datepickerMin"/>&nbsp;<span class="glyphicon glyphicon-calendar"/>
+                    </td>
+                    <td></td>                    
+                    <td></td>
+                    <td></td>
+                    <td>Principal</td>
+                    <td>{!New_Total_Principal_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input onclick="calc();" type="button" value="Calculate" class="btn"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;"><b>Waive</b></td>
+                    <td>Interest</td>
+                    <td>{!New_Total_Interest_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">                         
+                         <input id="waiveCharges1" value="{!waiveCharges}" disabled="{!NOT(lr.Rules_Engine__r.Charges_waiver__c)}"   type="checkbox"  onClick="toggleWaiveCharges(this)"/>
+                    </td>
+                    <td>Charges</td>
+                    <td>{!Loan_Charges}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td> 
+                    <td></td>
+                    <td style="text-align: center;">
+                            <input id="waiveVat1" type="checkbox" value="{!waiveVat}" onClick="toggleWaiveVat(this)" disabled="{!NOT(lr.Rules_Engine__r.Charges_waiver__c)}"/>
+                    </td>
+                    <td>VAT</td>
+                    <td>{!Loan_VAT}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td>{!Total_Amount}</td> 
+                    <td></td>
+                </tr>
+            </table>          
+        </apex:pageBlockSection>
+            </div> 
+       <!--END EARLY REPAYMENT SECTION --> 
+            
+       <!-- BOUNCE BACK SECTION -->   
+        
+        <div class='section' id="bounceBackSection">    
+        <apex:pageBlockSection title="Bounce back" columns="1" id="bounceBackSection1" >
+            <table class="sectionTable table">
+                <thead>
+                    <tr>
+                        <td>Bounced Back Amount</td>
+                        <td>Bounced Back Date</td>
+                        <td>Repayment Method</td>                    
+                        <td><div class='bbPaymentReceivedHidden'>Payment Received</div></td>
+                        <td><u class='bbHidden'>New Repayment Schedule:</u></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>{!BB_Amount}</td>
+                    <td>{!lr.BB_Date__c}</td>
+                    <td>
+                        <select id="repaymentMethod">
+                            <option value="null">--None--</option>  
+                            <option value="{!lr.Rules_Engine__r.Repayment_method__c}">{!lr.Rules_Engine__r.Repayment_method__c}</option>
+                            <option value="Manual">Manual</option>
+                        </select>
+                    </td>                     
+                    <td>
+                            <input class='bbPaymentReceivedHidden' id="paymentReceived" type="checkbox" value="{!paymentReceived}" />
+                    </td>
+                    <td class='bbHidden'>New Loan End Date</td>
+                    <td class='bbHidden'>{!newEndDate}</td>
+                    <td></td>
+                </tr>
+                <tr class='bbHidden'>
+                    <td></td>
+                    <td></td>                    
+                    <td></td>
+                    <td></td>
+                    <td>Principal</td>
+                    <td>{!New_Total_Principal_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr class='bbHidden'>
+                    <td><input onclick="calc();" type="button" value="Calculate" class="btn"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;"><b>Waive</b></td>
+                    <td>Interest</td>
+                    <td>{!New_Total_Interest_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr class='bbHidden'>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveCharges2"  class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                         <input id="waiveCharges2" value="{!waiveCharges}"    type="checkbox"  Class=" mdl-checkbox__input" onClick="toggleWaiveCharges(this)"/>
+                        </label>
+                    </td>
+                    <td>Charges</td>
+                    <td>{!Loan_Charges}</td>
+                    <td></td>
+                </tr>
+                <tr class='bbHidden'>
+                    <td></td>
+                    <td></td> 
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveVat2" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                            <input id="waiveVat2" type="checkbox" value="{!waiveVat}" Class="mdl-checkbox__input" onClick="toggleWaiveVat(this)" />
+                       </label></td>
+                    <td>VAT</td>
+                    <td>{!Loan_VAT}</td>
+                    <td></td>
+                </tr>
+                <tr class='bbHidden'>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td>{!Total_Amount}</td>
+                    <td></td>
+                </tr>
+            </table>            
+        </apex:pageBlockSection>
+        </div>
+       <!--END BOUNCE BACK SECTION --> 
+            
+       <!-- RESTRUCTURE SECTION --> 
+         
+        <div class='section' id="restructureSection">     
+        <apex:pageBlockSection title="Restructure details" columns="1" id="restructureSection1">
+            <table class="sectionTable  table">
+                <thead>
+                    <tr>
+                        <td>Proposed Restructure Date</td>
+                        <td>Restructure Amount</td>
+                        <td>
+                            <span class="helpButton" id="Restructure-_help">Number of Payments
+                                <img src="/s.gif" id="HelpImage" alt="" class="helpOrb" title="" />
+                                <script type="text/javascript">sfdcPage.setHelp('Restructure', 'Only terms from products associated with the selected Program are available');</script>
+                            </span>
+                        </td>
+                        <td></td>
+                        <td><u>New Repayment Schedule:</u></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td><input type="text" id="newProposedRestructureDate" class="datepickerMin" value="{!EventStartDate}" />&nbsp;<span class="glyphicon glyphicon-calendar"/></td>
+                    <td><input type="text" id="newRestructureAmount" value="{!EventAmount}" /></td>
+                    <td><select id="newProposedNumPayments" class="termDropdown">
+                        <option value="null">--None--</option>
+                        <option value="90">03 (090 days)</option>
+                        <option value="120">04 (120 days)</option>
+                        <option value="150">05 (150 days)</option>
+                        <option value="180">06 (180 days)</option>
+                        <option value="210">07 (210 days)</option>
+                        <option value="240">08 (240 days)</option>
+                        <option value="270">09 (270 days)</option>
+                        <option value="365">12 (365 days)</option>
+                    </select></td>                
+                    <td></td>
+                    <td>New Loan End Date</td>
+                    <td>{!newEndDate}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>                    
+                    <td></td>
+                    <td></td>
+                    <td>Principal</td>
+                    <td>{!New_Total_Principal_Amount}</td>
+                    <td></td>
+                </tr>
+                  
+                <tr>
+                    <td><input onclick="calc();" type="button" value="Calculate" class="btn"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;"><b>Waive</b></td>
+                    <td>Interest</td>
+                    <td>{!New_Total_Interest_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveCharges3"  class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                         <input id="waiveCharges3" value="{!waiveCharges}"    type="checkbox"  Class=" mdl-checkbox__input" onClick="toggleWaiveCharges(this)"/>
+                        </label>
+                    </td>
+                    <td>Charges</td>
+                    <td>{!Loan_Charges}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td> 
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveVat3" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                            <input id="waiveVat3" type="checkbox" value="{!waiveVat}" Class="mdl-checkbox__input" onClick="toggleWaiveVat(this)" />
+                       </label></td>
+                    <td>VAT</td>
+                    <td>{!Loan_VAT}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td>{!Total_Amount}</td>
+                    <td></td>
+                </tr>
+            </table>
+        </apex:pageBlockSection>
+        </div>    
+       <!--END RESTRUCTURE SECTION --> 
+            
+       <!-- PAYMENT HOLIDAY SECTION --> 
+       
+        <div class='section' id="paymentHolidaySection">      
+        <apex:pageBlockSection title="Payment Holiday" columns="1" id="paymentHolidaySection1">
+            <table class="sectionTable table">
+                <thead>
+                    <tr>
+                        <td>
+                            <span class="helpButton" id="PH-_help">Payment Holiday Start Date
+                                <img src="/s.gif" id="HelpImage" alt="" class="helpOrb" title="" />
+                                <script type="text/javascript">sfdcPage.setHelp('PH', 'Notification Days have been added to the Payment Holiday Start Date');</script>
+                            </span>
+                        </td>
+                        <td>Payment Holiday End Date</td>
+                        <td></td>
+                        <td></td>
+                        <td><u>New Repayment Schedule:</u></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td><input type="text" id="newPaymentHolidayStartDate" readonly='true' class="datepickerMin" value="{!EventStartDate}" />&nbsp;<span class="glyphicon glyphicon-calendar"/></td>
+                    <td><input type="text" id="newPaymentHolidayEndDate"  readonly='true' class="datepickerMin" value="{!EventEndDate}" />&nbsp;<span class="glyphicon glyphicon-calendar"/></td>
+                    <td></td>
+                    <td></td>
+                    <td>New Loan End Date:</td>
+                    <td>{!newEndDate}</td>
+                    <td></td>
+                </tr>
+                <tr>                   
+                    <td>Max Payment Holiday Duration: {!maxHolidayDur}</td>
+                    <td>Notification Days: {!notDays}</td> 
+                    <td></td>
+                    <td></td>
+                    <td>Principal</td>
+                    <td>{!New_Total_Principal_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input onclick="calc();" type="button" value="Calculate" class="btn"/></td>
+                    <td></td>                    
+                    <td></td>                    
+                    <td style="text-align: center;"><b>Waive</b></td>
+                    <td>Interest</td>
+                    <td>{!New_Total_Interest_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveCharges4"  class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                         <input id="waiveCharges4" value="{!waiveCharges}"    type="checkbox"  Class=" mdl-checkbox__input" onClick="toggleWaiveCharges(this)"  />
+                        </label>
+                    </td>
+                    <td>Charges</td>
+                    <td>{!Loan_Charges}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveVat4" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                            <input id="waiveVat4" type="checkbox" value="{!waiveVat}" Class="mdl-checkbox__input" onClick="toggleWaiveVat(this)" />
+                       </label></td>
+                    <td>VAT</td>
+                    <td>{!Loan_VAT}</td>    
+                    <td></td>              
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td> 
+                    <td></td>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td>{!Total_Amount}</td>
+                    <td></td>
+                </tr>
+            </table>        
+        </apex:pageBlockSection>
+        </div>    
+       <!--END PAYMENT HOLIDAY SECTION -->       
+            
+        <!-- DEBT COLLECTION SECTION -->
+        
+        <div class='section' id="debtSection">     
+        <apex:pageBlockSection title="Debt collection" columns="1" id="debtSection1">
+            <table class="sectionTable table" id="debtSectionTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <td>Payment Amount</td>
+                        <td>Principal Allocation</td>
+                        <td>Interest Allocation</td>
+                        <td></td>
+                        <td><u>New Repayment Schedule:</u></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td><input type="text" id="newPaymentAmount" value="{!EventAmount}" style="display:none;"/></td>
+                    <td><input type="text" id="newPrincipalAllocation" value="{!EventAmountAllocation1}"  style="display:none;"/></td>                    
+                    <td><input type="text" id="newInterestAllocation" value="{!EventAmountAllocation2}"  style="display:none;"/></td>
+                    <td></td>
+                    <td>Principal</td>
+                    <td>{!New_Total_Principal_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Suspended</td>
+                    <td>
+                        <label for="moveToSuspension"  class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                         <input id="moveToSuspension" value="{!lr.Move_to_Suspension__c}"  disabled="disabled"  type="checkbox"  Class=" mdl-checkbox__input"  />
+                        </label></td>
+                    <td></td>
+                    <td style="text-align: center;"><b>Waive</b></td>
+                    <td>Interest</td>
+                    <td>{!New_Total_Interest_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input onclick="calcDebt();" type="button" value="Calculate" class="btn"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveCharges5"  class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                         <input id="waiveCharges5" value="{!waiveCharges}"    type="checkbox"  Class=" mdl-checkbox__input" onClick="toggleWaiveCharges(this)" />
+                        </label>
+                    </td>
+                    <td>Charges</td>
+                    <td>{!Loan_Charges}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td> 
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveVat5" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                            <input id="waiveVat5" type="checkbox" value="{!waiveVat}" Class="mdl-checkbox__input" onClick="toggleWaiveVat(this)" />
+                       </label></td>
+                    <td>VAT</td>
+                    <td>{!Loan_VAT}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td>{!Total_Amount}</td>
+                    <td></td>
+                </tr>
+            </table>
+            <apex:pageBlock mode="maindetail"><apex:pageBlockButtons location="bottom">
+                <apex:commandButton rendered="{!NOT(lr.Move_to_Suspension__c)}" action="{!moveToSuspension}" styleClass="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" value="Move To Suspension" onclick="return confirm('Do you want to move it to suspension ?');" /> 
+            </apex:pageBlockButtons></apex:pageBlock>            
+        </apex:pageBlockSection>
+        </div>    
+       <!--END DEBT COLLECTION SECTION -->
+
+            
+        <!-- Top-Up SECTION --> 
+         
+        <div class='section' id="topUpSection">        
+        <apex:pageBlockSection title="Top up" columns="1" id="topUpSection1">
+            <table class="sectionTable table">
+                <thead>
+                    <tr>
+                        <td>Payment Amount</td>
+                        <td>Term</td>
+                        <td>Date</td>
+                        <td></td>
+                        <td><u>New Repayment Schedule:</u></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td><input type="text" id="newTopupAmount" value="{!EventAmount}" /></td>                    
+                    <td>
+                        <!-- <apex:selectList size="1" id="topupTerm1" value="{!EventLoanTerm}" style="float:left; width:15%;"> 
+                            <apex:selectOptions value="{!availableLoanTermFromProgram}" /> 
+                       </apex:selectList> -->
+                    <select id="topupTerm" class="termDropdown">
+                        <option value="null">--None--</option>
+                        <option value="90">03 (090 days)</option>
+                        <option value="120">04 (120 days)</option>
+                        <option value="150">05 (150 days)</option>
+                        <option value="180">06 (180 days)</option>
+                        <option value="210">07 (210 days)</option>
+                        <option value="240">08 (240 days)</option>
+                        <option value="270">09 (270 days)</option>
+                        <option value="365">12 (365 days)</option>
+                    </select>  </td>              
+                    <td><input type="text" id="newTopupDate" value="{!EventStartDate}"  class="datepickerMin"/>&nbsp;<span class="glyphicon glyphicon-calendar"/></td>
+                    <td></td>
+                    <td>Principal</td>
+                    <td>{!New_Total_Principal_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input onclick="calc();" type="button" value="Calculate" class="btn"/></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;"><b>Waive</b></td>
+                    <td>Interest</td>
+                    <td>{!New_Total_Interest_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveCharges6"  class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                         <input id="waiveCharges6" value="{!waiveCharges}"    type="checkbox"  Class=" mdl-checkbox__input" onClick="toggleWaiveCharges(this)" />
+                        </label>
+                    </td>
+                    <td>Charges</td>
+                    <td>{!Loan_Charges}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td> 
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveVat6" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                            <input id="waiveVat6" type="checkbox" value="{!waiveVat}" Class="mdl-checkbox__input" onClick="toggleWaiveVat(this)" />
+                       </label></td>
+                    <td>VAT</td>
+                    <td>{!Loan_VAT}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td>{!Total_Amount}</td>
+                    <td></td>
+                </tr>
+            </table>          
+        </apex:pageBlockSection>
+        </div>     
+       <!--END Top-Up SECTION -->
+        <!-- One Off SECTION --> 
+         
+        <div class='section' id="oneOffSection">        
+        <apex:pageBlockSection title="One Off" columns="1" id="oneOffSection1">
+            <table class="sectionTable table">
+                <thead>
+                    <tr>
+                        <td>Date</td>
+                        <td>Reschedule Method</td>
+                        <td>Amount</td>
+                        <td></td>
+                        <td><u>New Repayment Schedule:</u></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td><input type="text" id="newOneOffDate" value="{!EventStartDate}"  class="datepickerMin"/>&nbsp;<span class="glyphicon glyphicon-calendar"/></td>    
+                    
+                    <td>
+                        <select id="oneOffMethod">
+                            <option value="null">--None--</option>
+                            <option value="Keep Installment">Keep Installment</option>
+                            <option value="Keep Term">Keep Term</option>
+                        </select>
+                    </td>  
+                    
+                    <!--
+                    <td>
+                        <apex:selectList id="oneOffMethod" value="{!EventProcessMethod}" multiselect="false" size="1">
+                            <apex:selectOption itemValue="Keep Installment" itemLabel="Keep Installment"/>
+                            <apex:selectOption itemValue="Keep Term" itemLabel="Keep Term"/>
+                        </apex:selectList>
+                    </td>
+                    -->
+                    <td><input type="text" id="newOneOffAmount" value="{!EventAmount}" /></td>                
+                    <td></td>
+                    <td>Principal</td>
+                    <td>{!New_Total_Principal_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input onclick="calc();" type="button" value="Calculate" class="btn"/></td>                    
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;"><b>Waive</b></td>
+                    <td>Interest</td>
+                    <td>{!New_Total_Interest_Amount}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveCharges7"  class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                         <input id="waiveCharges7" value="{!waiveCharges}"    type="checkbox"  Class=" mdl-checkbox__input" onClick="toggleWaiveCharges(this)" />
+                        </label>
+                    </td>
+                    <td>Charges</td>
+                    <td>{!Loan_Charges}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td> 
+                    <td></td>
+                    <td style="text-align: center;">
+                        <label for="waiveVat7" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                            <input id="waiveVat7" type="checkbox" value="{!waiveVat}" Class="mdl-checkbox__input" onClick="toggleWaiveVat(this)" />
+                       </label></td>
+                    <td>VAT</td>
+                    <td>{!Loan_VAT}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td>{!Total_Amount}</td>
+                    <td></td>
+                </tr>
+            </table>         
+        </apex:pageBlockSection>
+        </div>     
+       <!--END One Off SECTION -->
+       
+       <!--Action used in Calculate button -->
+        <apex:actionFunction name="calc" action="{!calculation}" />
+        <apex:actionFunction rendered="{!lr.Move_to_Suspension__c}" name="calcDebt" action="{!calculation}" />
+            
+          <!-- APPROVAL SECTION -->
+        <div class='section' id="approvalSection">        
+         <apex:pageBlockSection title="Approval" columns="3" id="approvalSection1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Agreed by Client " >
+                <apex:inputCheckbox value="{!agreedByClient}" id="agreedByClientCheckbox" onClick="return toggleSignOff(this)"/>
+            </apex:outputLabel>
+            </apex:pageBlockSectionItem>
+             <apex:pageBlockSectionItem >
+                 <!-- <apex:outputLabel /> -->
+                 <apex:commandButton id="signOffButton" value="Sign Off" action="{!signOff}" />
+             </apex:pageBlockSectionItem>
+             
+        </apex:pageBlockSection>  
+                   
+        </div>           
+        <!-- END APPROVAL SECTION -->
+            
+        <!--  Loan Closure SECTION -->
+        <div class='section' id="loanClosureSection">      
+        <apex:pageBlockSection title="Loan Closure" columns="3" id="loanClosureSection1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Payment Received " styleClass="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                <apex:inputCheckbox value="{!paymentReceived}" styleClass="mdl-checkbox__input" onClick="togglepaymentclosebtn(this)"/>
+            </apex:outputLabel>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <input type="submit" value="Close loan" class="btn" disabled="disabled" id="btn_close_loan"/>
+            </apex:pageBlockSectionItem>            
+        </apex:pageBlockSection>             
+        </div>   
+            <apex:pageBlockSection showHeader="false"><br/></apex:pageBlockSection>            
+        </apex:pageBlock>
+      <apex:outputPanel style="display:none;">
+             <apex:input value="{!clientID}" id="hiddenClientID"/>
+             <apex:input value="{!clientName}" id="hiddenClientName"/>
+             <apex:input value="{!waiveCharges}" id="hiddenWaiveCharges"/>
+             <apex:input value="{!waiveVat}" id="hiddenWaiveVat"/>
+             <apex:input value="{!screenSelected}" id="hiddenScreenSelected"/>
+             <apex:inputField value="{!lr.Move_to_Suspension__c}" id="hiddenMoveToSuspension"/>
+          
+             <apex:input value="{!EventStartDate}" id="hiddenEventStartDate"/>
+             <apex:input value="{!EventEndDate}" id="hiddenEventEndDate"/>
+             <apex:input value="{!EventAmount}" id="hiddenEventAmount"/>
+             <apex:input value="{!EventProcessMethod}" id="hiddenEventProcessMethod"/>
+             <apex:input value="{!EventLoanTerm}" id="hiddenEventLoanTerm"/>
+             <apex:input value="{!EventAmountAllocation1}" id="hiddenEventAmountAllocation1"/>
+             <apex:input value="{!EventAmountAllocation2}" id="hiddenEventAmountAllocation2"/>
+        </apex:outputPanel>
+    </div>
+       </apex:form>
+    
+    <script>
+       function togglepaymentclosebtn(val){
+           $(val).is(':checked') ? $("#btn_close_loan").removeAttr('disabled') : $('#btn_close_loan').attr("disabled","disabled");             
+       }
+       
+       function setFocusOnLoad() {}
+
+       function toggleWaiveCharges(el){
+             $(el).is(':checked') ? $("[id$=hiddenWaiveCharges]").val(true) : $("[id$=hiddenWaiveCharges]").val(false);     
+       }      
+      function toggleWaiveVat(el){
+             $(el).is(':checked') ? $("[id$=hiddenWaiveVat]").val(true) : $("[id$=hiddenWaiveVat]").val(false);     
+       }
+     
+      function toggleSignOff(el){
+        var urlParamCalculation = location.search.split('calculation=')[1];
+        var selectedScreen = location.search.split('screenSelected=')[1];
+            if(undefined == urlParamCalculation && (selectedScreen != 'bounceBackSection' || (selectedScreen == 'bounceBackSection' && $("#repaymentMethod").val() != 'Manual'))){
+                alert("You must make a calculation first"); 
+                return false;
+            }
+             $(el).is(':checked') ? $("[id$=signOffButton]").show() : $("[id$=signOffButton]").hide();    
+          return true;
+       }
+    
+     function filterTermDropdown () {
+         var arrayTerms = {!availableTermValues};
+         console.log ("Available Terms:" + arrayTerms);
+         $('.termDropdown option').each(function() {
+             //console.log($.inArray(parseInt($(this).val()), arrayTerms));
+            if ($.inArray(parseInt($(this).val()), arrayTerms) == -1 && $(this).val() != 'null') {
+                $(this).remove();
+            }
+        });
+     }    
+    
+    
+     $(function() {                $(".datepicker").datepicker({
+                  showOn: "both",
+                  buttonImage: "https://storage.googleapis.com/material-icons/external-assets/v2/icons/svg/ic_today_black_24px.svg",
+                  buttonImageOnly: true,
+                  buttonText: "Select date",
+          dateFormat: "dd/mm/yy",
+          minDate: 0,
+          changeMonth: true,
+          beforeShowDay: $.datepicker.noWeekends,
+          firstDay: 1
+       });              
+       $(".datepickerMin").datepicker({
+                  showOn: "both",
+                  buttonImage: "https://storage.googleapis.com/material-icons/external-assets/v2/icons/svg/ic_today_black_24px.svg",
+                  buttonImageOnly: true,
+                  buttonText: "Select date",
+          dateFormat: "dd/mm/yy",
+          changeMonth: true,
+          minDate: {!notDays},
+          maxDate: new Date ('{!lr.LoanEndDate__c}' ), 
+          beforeShowDay: $.datepicker.noWeekends,
+          firstDay: 1
+       });  
+         location.search.split('screenSelected=')[1] != null ? 
+             $("#screenSelected").val(location.search.split('screenSelected=')[1]) :  $("[id$=hiddenScreenSelected]").val()  ? 
+                                    ($("#screenSelected").val( $("[id$=hiddenScreenSelected]").val()),$("#pbSections").hide()) 
+                                                : $("#screenSelected").val('None');
+       $("[id$=hiddenScreenSelected]").val( $("#screenSelected").val());
+       $("#repaymentMethod").val("{!EventProcessMethod}");
+       if($("#repaymentMethod").val() == 'Manual')  $(".bbHidden").hide();
+       if($("#repaymentMethod").val() != 'Manual')  $(".bbPaymentReceivedHidden").hide();
+       $("#topupTerm").val("{!EventLoanTerm}");
+       $("#oneOffMethod").val("{!EventProcessMethod}");
+       $("#newProposedNumPayments").val("{!EventLoanTerm}");  
+         
+     });
+                
+    $(document).ready(function(){
+        console.log("Rules Engine ID:" + '{!lr.Rules_Engine__c}');
+        console.log('Loan Ledger ID : {!lr.id}');
+        console.log('Operation ID : {!lr.LoanID__c}');
+        filterTermDropdown();
+        //alert('{!lr.NewLoanEndDate__c}');
+        //alert('{!newEndDate}');
+        var urlParam = location.search.split('accountID=')[1];  
+        var urlParam2 = location.search.split('screenSelected=')[1]; 
+        //alert(urlParam);
+        if(urlParam!=undefined){  
+             $("#repaymentMethod").val("{!EventProcessMethod}");
+            // document.querySelector('#p1').addEventListener('mdl-componentupgraded', function() {
+                //alert({!progress});
+            // this.MaterialProgress.setProgress({!progress});
+            // });
+          
+            if(urlParam2!=undefined){
+                $('#'+urlParam2).show();
+                if(urlParam2 == 'earlyRepaymentSection') $('#loanClosureSection').show();
+                if (urlParam2 != 'debtSection' || '{!lr.Move_to_Suspension__c}' != 'false') {  
+                    $('#approvalSection').show();
+                } 
+               if('{!lr.Move_to_Suspension__c}' == 'true') {
+                   $('#debtSectionTable').show();
+                  $('#moveToSuspension').prop('checked', true);
+                   $('#newPaymentAmount').show();
+                   $('#newPrincipalAllocation').show();
+                   $('#newInterestAllocation').show();
+               }
+            }
+        }
+        
+        $("[id$=agreedByClientCheckbox]").is(':checked') ? $("[id$=signOffButton]").show() : $("[id$=signOffButton]").hide(); 
+        
+        $("#screenSelected").change(function(){
+           $("[id$=hiddenScreenSelected]").val($(this).val());
+        });
+        $("#clientID").change(function(){
+           $("[id$=hiddenClientID]").val($(this).val());
+        });
+        $("#clientName").change(function(){
+           $("[id$=hiddenClientName]").val($(this).val());
+        });
+        
+        $("#proposedDate").change(function(){
+           $("[id$=hiddenEventStartDate]").val($(this).val());
+        });
+        $("#repaymentMethod").change(function(){
+            $("[id$=hiddenEventProcessMethod]").val($(this).val());            
+            if($(this).val() == 'Manual') $(".bbHidden").hide(400); else $(".bbHidden").show(400);
+        });
+        $("#repaymentMethod").change(function(){
+            $("[id$=hiddenEventProcessMethod]").val($(this).val());            
+            if($(this).val() != 'Manual') $(".bbPaymentReceivedHidden").hide(400); else $(".bbPaymentReceivedHidden").show(400);
+        });        
+        $("#bouncedBackAmount").change(function(){
+           $("[id$=hiddenEventAmount]").val($(this).val());
+        });
+        $("#bouncedBackDate").change(function(){
+           $("[id$=hiddenEventStartDate]").val($(this).val());
+        });
+        $("#newProposedRestructureDate").change(function(){
+            $("[id$=hiddenEventStartDate]").val($(this).val());
+        });
+        $("#newProposedNumPayments").change(function(){
+            $("[id$=hiddenEventLoanTerm]").val($(this).val());
+        });
+        $("#newRestructureAmount").change(function(){
+            $("[id$=hiddenEventAmount]").val($(this).val());
+        });
+        $("#newPaymentHolidayStartDate").change(function(){
+            $("[id$=hiddenEventStartDate]").val($(this).val());
+            var startDate = $.datepicker.parseDate('dd/mm/yy', $(this).val());  
+            var endDate =  new Date (JSON.parse(JSON.stringify(startDate)));
+            endDate = endDate.add({!maxHolidayDur}).days();
+
+        $("#newPaymentHolidayEndDate").datepicker("destroy");
+        $("#newPaymentHolidayEndDate").datepicker({ 
+                  showOn: "both",
+                  buttonImage: "https://storage.googleapis.com/material-icons/external-assets/v2/icons/svg/ic_today_black_24px.svg",
+                  buttonText: "Select date",
+                  buttonImageOnly: true,
+            dateFormat: "dd/mm/yy",
+                  minDate:startDate,
+                  maxDate:endDate,
+                  changeMonth: true,
+                  beforeShowDay: $.datepicker.noWeekends,
+                  firstDay: 1
+
+               });
+        });
+        $("#newPaymentHolidayEndDate").change(function(){
+            $("[id$=hiddenEventEndDate]").val($(this).val());
+        });
+        $("#newPaymentAmount").change(function(){
+           $("[id$=hiddenEventAmount]").val($(this).val());
+        });
+        $("#newPrincipalAllocation").change(function(){
+           $("[id$=hiddenEventAmountAllocation1]").val($(this).val());
+        });
+        $("#newInterestAllocation").change(function(){
+           $("[id$=hiddenEventAmountAllocation2").val($(this).val());
+        });
+        $("#newTopupAmount").change(function(){
+           $("[id$=hiddenEventAmount]").val($(this).val());
+        });
+        $("#topupTerm").change(function(){
+           $("[id$=hiddenEventLoanTerm]").val($(this).val());
+        });
+        $("#newTopupDate").change(function(){
+           $("[id$=hiddenEventStartDate]").val($(this).val());
+        });
+        
+        $("#newOneOffAmount").change(function(){
+           $("[id$=hiddenEventAmount]").val($(this).val());
+        });
+        $("[id$=oneOffMethod]").change(function(){
+           $("[id$=hiddenEventProcessMethod]").val($(this).val());
+        });
+        $("#newOneOffDate").change(function(){
+           $("[id$=hiddenEventStartDate]").val($(this).val());
+        });        
+        
+        
+        
+        $('#chkbx_payment_recieved').click(function(){
+            alert('i m in');
+            if($(this).attr('checked') == false){
+                 $('#btn_close_loan').attr("disabled","disabled");   
+            } else {
+                $('#btn_close_loan').removeAttr('disabled');
+            }
+        });
+        
+    });
+    </script>
+</apex:page>

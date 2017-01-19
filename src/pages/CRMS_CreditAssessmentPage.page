@@ -1,0 +1,265 @@
+<apex:page standardController="Credit_Assessment__c" extensions="CRMS_CreditAssessmentController"
+sidebar="false" showHeader="false" cache="false">    
+    <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css"/>    
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>
+    <apex:includeScript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
+    <style>
+        .fieldLabel {
+            font-size: 82%;
+            font-weight: bold;
+            font-family: Arial,Helvetica,sans-serif;
+        }
+        
+        .sectionHeader {
+              margin-bottom: 5px;
+              font-size: 15px;
+        }
+        
+        .fieldSection {
+            margin-left: -15px;
+            margin-bottom: 3px;
+        }
+        .fieldValue {
+            font-size: 12px;
+        }
+        .borderRight {
+            border-right: solid 1px;
+        }
+       
+    </style>
+    
+    <div>
+        <div class="progress" style="margin-bottom: 0px;">
+          <div class="progress-bar progress-bar-striped progress-bar-danger active" role="progressbar" style="width:49%" >
+            REJECT
+          </div>
+          <div class="progress-bar progress-bar-striped  progress-bar-warning active" role="progressbar" style="width:20%">
+            MODIFY WITH CONDITIONS
+          </div>
+          <div class="progress-bar progress-bar-striped  active" role="progressbar" style="width:20%; background-color:#CCCC00;">
+            MODIFY
+          </div>
+          <div class="progress-bar  progress-bar-striped  progress-bar-success active" role="progressbar" style="width:11%">
+            APPROVE
+          </div>
+        </div> 
+        <div class="" style="height:64px; margin-bottom:20px;">
+          <div class="" role="progressbar" 
+          aria-valuenow="{!objCA.AMP_Credit_Score__c}" aria-valuemin="0" aria-valuemax="100" style="width:{!objCA.AMP_Credit_Score__c}%">
+            <div style="width: 64px; height: 64px;position: relative; left: 15px; background:url('http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-9/64/triangle-icon.png') no-repeat; float:right;" >
+                <div style="color:#ffffff; font-size: 10px; position:relative; top: 40px; left: 15px;">
+                    {!objCA.AMP_Credit_Score__c}%                    
+                </div></div>
+          </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Requested</th>
+                    <th class="borderRight">&nbsp;</th>
+                    <th>Credit Limit</th>
+                    <th class="borderRight">&nbsp;</th>
+                    <th>Approved</th>
+                    <th>&nbsp;</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Loan_Purpose__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"> <apex:outputField value="{!Credit_Assessment__c.Loan_Purpose__c}"/></td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td class="fieldValue borderRight">&nbsp;</td>
+                    <td>
+                           &nbsp;
+                    </td>
+                    <td class="fieldValue">&nbsp;</td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Requested_Loan_Amount__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Requested_Loan_Amount__c}"/></td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Offer_Amount__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Offer_Amount__c}"/></td>
+                    <td>
+                         <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Approved_Loan_Amount__c.Label}"/>
+                    </td>
+                    <td class="fieldValue"><apex:outputField value="{!Credit_Assessment__c.Approved_Loan_Amount__c}"/></td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Requested_Loan_Term__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Requested_Loan_Term__c}"/></td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Offer_Term__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Offer_Term__c}"/></td>
+                    <td>
+                         <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Approved_Loan_Term__c.Label}"/>
+                    </td>
+                    <td class="fieldValue"><apex:outputField value="{!Credit_Assessment__c.Approved_Loan_Term__c}"/></td>
+                </tr>
+                
+
+                
+                <tr>
+                   <td>
+                       <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Monthly_Interest_Requested__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"> <apex:outputField value="{!Credit_Assessment__c.Monthly_Interest_Requested__c}"/></td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Monthly_Interest__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Monthly_Interest__c}"/></td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Monthly_Interest_Approved__c.Label}"/>
+                    </td>
+                    <td class="fieldValue"><apex:outputField value="{!Credit_Assessment__c.Monthly_Interest_Approved__c}"/></td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Number_of_Repayments_Requested__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"> <apex:outputField value="{!Credit_Assessment__c.Number_of_Repayments_Requested__c}"/></td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Number_of_Repayments_Offer__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Number_of_Repayments_Offer__c}"/></td>
+                    <td>
+                          <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Number_of_Repayments_Approved__c.Label}"
+                          rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                          <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Number_of_Weekly_Repayments_Approved__c.Label}"
+                          rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td class="fieldValue">
+                        <apex:outputField value="{!Credit_Assessment__c.Number_of_Repayments_Approved__c}" rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Number_of_Weekly_Repayments_Approved__c}" rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                </tr>
+                 
+                <tr>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Principal_Daily_Repayment_Requested__c.Label}"
+                        rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Principal_Weekly_Repayment_Requested__c.Label}"
+                        rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td class="fieldValue borderRight">
+                        <apex:outputField value="{!Credit_Assessment__c.Principal_Daily_Repayment_Requested__c}" rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Principal_Weekly_Repayment_Requested__c}" rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                        </td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="Principal Repayment (Offer)"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Principal_Daily_Repayment_Offer__c}"/></td>
+                    <td>
+                           <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Principal_Daily_Repayments_Approved__c.Label}"
+                           rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                           <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Principal_Weekly_Repayments_Approved__c.Label}"
+                           rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td class="fieldValue">
+                        <apex:outputField value="{!Credit_Assessment__c.Principal_Daily_Repayments_Approved__c}" rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Principal_Weekly_Repayments_Approved__c}" rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Interest_Daily_Repayment_Requested__c.Label}"
+                        rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Interest_Weekly_Repayment_Requested__c.Label}"
+                        rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td class="fieldValue borderRight">
+                        <apex:outputField value="{!Credit_Assessment__c.Interest_Daily_Repayment_Requested__c}" rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Interest_Weekly_Repayment_Requested__c}" rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="Interest Repayment (Offer)"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Interest_Daily_Repayment_Offer__c}"/></td>
+                    <td>
+                           <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Interest_Daily_Repayment_Approved__c.Label}"
+                           rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                           <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Interest_Weekly_Repayment_Approved__c.Label}"
+                           rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td class="fieldValue">
+                        <apex:outputField value="{!Credit_Assessment__c.Interest_Daily_Repayment_Approved__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Interest_Weekly_Repayment_Approved__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Total_Daily_Repayment_Requested__c.Label}"
+                        rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Total_Weekly_Repayment_Requested__c.Label}"
+                        rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td class="fieldValue borderRight">
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Daily_Repayment_Requested__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Weekly_Repayment_Requested__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="Total Repayment (Offer)"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Total_Daily_Repayment_Offer__c}"/></td>
+                    <td>
+                           <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Total_Daily_Repayment_Approved__c.Label}"
+                           rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                           <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Total_Weekly_Repayment_Approved__c.Label}"
+                           rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td class="fieldValue">
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Daily_Repayment_Approved__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Weekly_Repayment_Approved__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Total_Amount_Repayable_Requested__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight">
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Amount_Repayable_Requested__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Weekly_Amount_Repayable_Requested__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                    <td>
+                        <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Total_Amount_Repayable_Offer__c.Label}"/>
+                    </td>
+                    <td class="fieldValue borderRight"><apex:outputField value="{!Credit_Assessment__c.Total_Amount_Repayable_Offer__c}"/></td>
+                    <td>
+                           <apex:outputlabel styleClass="fieldLabel" value="{!$ObjectType.Credit_Assessment__c.fields.Total_Amount_Repayable_Approved__c.Label}"/>
+                    </td>
+                    <td class="fieldValue">
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Amount_Repayable_Approved__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c != 'Weekly'}"/>
+                        <apex:outputField value="{!Credit_Assessment__c.Total_Amount_Repayable_Approved__c}"
+                        rendered="{!Credit_Assessment__c.FOC__c == 'Weekly'}"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</apex:page>

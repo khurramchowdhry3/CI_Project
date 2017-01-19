@@ -1,0 +1,81 @@
+<apex:page controller="LM_LoanDetails_Controller" extensions="LMS_LoanSchedule" sidebar="false" showHeader="false" tabStyle="Operation__c" 
+    renderAs="{!IF(ISNULL($CurrentPage.parameters.p),'','PDF')}" applyHtmlTag="false" >
+       
+    <link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.AMP_LoanManagment, 'css/bootstrap/css/bootstrap.css')}"/>    
+    <apex:includeScript value="https://code.jquery.com/jquery-2.1.4.min.js"/>
+    <apex:includeScript value="{!URLFOR($Resource.AMP_LoanManagment, 'css/bootstrap/js/bootstrap.js')}"/>
+    
+           
+    <apex:sectionHeader title="Loan Schedule" subtitle="Client : {!Client}"/>
+    <apex:pageMessages ></apex:pageMessages>
+    <div style="padding:15px;">
+        <div class="AMPLMS">
+            <div class="row" style="margin-bottom:2px;">
+                <div class="col-md-10"/>
+                <div class="col-md-2" >
+                    <button type="button" class="btn btn-default" aria-label="Print Loan Schedule" onclick="window.print();" style="float:right;">
+                        <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                    </button>
+                    <apex:outputLink styleClass="btn btn-default" value="{!$Page.LMS_LoanSchedule_Download}?Id={!$CurrentPage.parameters.Id}&p=1&c={!Client}" target="_blank" style="float:right;">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                    </apex:outputLink>                   
+                </div>
+            </div>
+        </div>
+        <apex:pageBlock >
+            <apex:pageBlockTable value="{!LoanScheduleItems}" var="Item" rendered="{!NOT(ISNULL(LoanScheduleItems))}">
+                <apex:column headerValue="Repayment Number" value="{!Item.repaymentNum}" / >
+                <apex:column headerValue="Schedule Pay Date" >           
+                    <apex:outputText value="{0,date,dd/MM/yyyy}">
+                         <apex:param value="{!Item.schedulePayDate}" />
+                    </apex:outputText>
+                </apex:column>            
+                <apex:column headerValue="Principal Amount" >
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!Item.principalAmount}"/>
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Interest Amount">
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!Item.interestAmount}"/>
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Fee Amount" >
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!Item.feeAmount}"/>
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="VAT Amount" rendered="{!VATNotZero}">
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!Item.interestVATAmount}"/>
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Repayment Per Installment">
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!Item.totalRepaymentPerInstallment}"/>
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Remaining Principal">
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!Item.remainingPrincipal}"/>
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Opening Balance">
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!Item.openingBalance}"/>
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Closing Balance">
+                    <apex:outputText value="{0, number, ##,##0.00}">
+                        <apex:param value="{!Item.closingBalance}"/>
+                    </apex:outputText>
+                </apex:column>            
+            </apex:pageBlockTable>
+            <apex:outputPanel style="margin-left:1.1em;" layout="block"
+                        rendered="{!(ISNULL(LoanScheduleItems))}"
+                        styleClass="panel">
+                        <span>No records to display</span>
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </div>    
+</apex:page>

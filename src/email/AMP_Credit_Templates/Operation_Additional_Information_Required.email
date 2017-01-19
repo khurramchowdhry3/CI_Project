@@ -1,0 +1,14 @@
+Hi, 
+<br/><br/>
+The Finance Team requires additional information before approval of the disbursal of funds.
+<br/><br/>
+Application reference : <br/>
+{!Operation__c.Name}
+<br/><br/>
+Required additional information:
+<br/>
+{!Operation__c.Additional_Information_Narrative__c}
+<br/><br/>
+Please provide all required information above.
+<br/><br/>
+Thank you

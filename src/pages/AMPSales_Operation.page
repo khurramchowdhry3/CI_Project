@@ -1,0 +1,3 @@
+<apex:page standardController="Operation__c">
+  <apex:detail subject="{!Operation__c.Id}" relatedList="true" inlineEdit="true" />
+</apex:page>

@@ -1,0 +1,22 @@
+<apex:component >
+    <apex:attribute name="fieldName" description="The name of the field used to display in the error message" type="string" required="true" />
+    <apex:attribute name="disableRequired" description="Allows for conditional enable/disable of required attribute" type="boolean" required="false" default="false" />
+    <apex:attribute name="customValidationMessage" description="Invalidates a field based on logic defined in the controller. Provides custom message" type="string" required="false" />
+    <apex:attribute name="for" description="Id of the element to which the validation message will be attached" type="string" required="false" />
+    <apex:outputPanel layout="block" id="requiredContainerDiv" >
+        <apex:outputPanel layout="block" styleClass="{!IF(disableRequired, '', 'xwRequiredInput')}">
+            <apex:outputPanel layout="block" styleClass="xwRequiredBlock" rendered="{!NOT(disableRequired)}"/>            
+            <apex:componentBody />
+            <apex:outputPanel rendered="{!len(customValidationMessage) > 0}">
+            	<script>
+            		var validatedElem = $(document.getElementById("{!$Component.requiredContainerDiv}")).find("[id$={!for}]").get(0);
+                   	validatedElem.setCustomValidity("{!customValidationMessage}");
+                	customValidate(validatedElem);                	
+            	</script>
+            </apex:outputPanel>
+            <apex:outputText style="display:none;" styleClass="xwFieldName" value="{!fieldName}"/>
+        </apex:outputPanel>
+        <apex:outputPanel styleClass="xwErrorMsg" layout="block" style="display:none;" rendered="{!NOT(disableRequired)}">
+        </apex:outputPanel>
+    </apex:outputPanel>
+</apex:component>

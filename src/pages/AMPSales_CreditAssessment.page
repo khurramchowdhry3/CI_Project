@@ -1,0 +1,83 @@
+<apex:page standardController="Credit_Assessment__c" extensions="AMPSales_CreditAssessment_Controller" docType="html-5.0">
+  <apex:includeScript value="https://code.jquery.com/jquery-2.1.4.min.js"/>
+    <apex:stylesheet value="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>    
+    <apex:includeScript value="//code.jquery.com/ui/1.11.4/jquery-ui.js"/>    
+    <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/LMDashboard_Events.css')}"/>
+        
+    <apex:form >        
+        <apex:sectionHeader title="Credit Assessment Edit" subtitle="{!CreditAssessment.Name}"/>        
+        <apex:pageBlock title="Credit Assessment Edit" mode="edit" tabStyle="Credit_Assessment__c">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!Save}" />                
+                <apex:outputLink value="{!ReturnURL}" styleClass="btn" style="text-decoration:none;padding:4px;">Cancel</apex:outputLink>                                            
+            </apex:pageBlockButtons>
+            <apex:pageMessages ></apex:pageMessages>
+            <apex:pageBlockSection columns="2" collapsible="false" title="Information" >
+                <apex:pageBlockSectionItem > 
+                    <apex:outputLabel value="{!$Label.CreditAssessment_Owner}"></apex:outputLabel>
+                    <apex:outputField value="{!CreditAssessment.Owner.Name}"/>   
+                </apex:pageBlockSectionItem>              
+                <apex:pageBlockSectionItem > 
+                    <apex:outputLabel value="{!$Label.Credit_Assessment_Record_Type}"></apex:outputLabel>
+                    <apex:outputField value="{!CreditAssessment.RecordType.Name}"/>    
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!CreditAssessment.Opportunity__c}"/>
+                <apex:outputText />
+                <apex:inputField value="{!CreditAssessment.Status__c}"/>                                                                              
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="2" collapsible="false" title="Loan Details" >
+                <apex:inputField value="{!CreditAssessment.Approved_Loan_Amount__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Credit_Assessment_Approved_Interest_Rate}"></apex:outputLabel>                
+                    <apex:selectList size="1" value="{!ApprovedInterestRate}" id="approvedinterestrates">
+                        <apex:selectOptions value="{!ApprovedInerestRates}"></apex:selectOptions>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem> 
+                <apex:inputField value="{!CreditAssessment.Program__c}"/>
+                <apex:inputField value="{!CreditAssessment.Approved_Loan_Term__c}" id="approvedloanterm"/>
+                <apex:inputField value="{!CreditAssessment.Program_Product_ASO__c}">
+                    <apex:actionSupport action="{!updateApprovedInterestRates}" event="onchange" reRender="approvedinterestrates, approvedloanterm" />
+                </apex:inputField>                                                                                                                  
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="2" collapsible="false" title="Applicant Information" >
+                <apex:inputField value="{!CreditAssessment.Business_Trading_Name__c}" />  
+                <apex:inputField value="{!CreditAssessment.Applicant_Name__c}" />                                      
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="2" collapsible="false" title="Further Information Requested" >
+                <apex:inputField value="{!CreditAssessment.Additional_Information_Required__c}" /> 
+                <apex:inputField value="{!CreditAssessment.Additional_Information_Satisfactory__c}" />
+                <apex:inputField value="{!CreditAssessment.Additional_Information_Details__c}"/>
+                <apex:outputText />
+                <apex:inputField value="{!CreditAssessment.Additional_Information_Narrative__c}" style="height:100px !important;width:388px !important;"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="2" collapsible="false" title="Credit Scoring" >
+                <apex:inputField value="{!CreditAssessment.AMP_Credit_Score__c}"/>
+                <apex:inputField value="{!CreditAssessment.Business_IQ_Score__c}"/>
+            </apex:pageBlockSection>
+            
+             <apex:pageBlockSection columns="2" collapsible="false" title="Credit Decision" >
+                <apex:inputField value="{!CreditAssessment.Final_Decision__c}"/>
+                <apex:inputField value="{!CreditAssessment.Final_Decision_Date__c}"/>
+                <apex:inputField value="{!CreditAssessment.Approved_By__c}"/>
+                <apex:inputField value="{!CreditAssessment.Approval_Date__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="1" collapsible="false" title="Loan Officer Notes" >
+                <apex:inputField value="{!CreditAssessment.Narrative_Box__c}" style="height:100px !important;width:388px !important;"/>               
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="1" collapsible="false" title="System Information" >
+                <apex:outputField value="{!CreditAssessment.Name}"/>               
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="2" collapsible="false" title="DWH Information" >
+                 <apex:inputField value="{!CreditAssessment.DWH_Status__c}"/>
+                 <apex:inputField value="{!CreditAssessment.DWH_Last_Sync__c}" />                                        
+            </apex:pageBlockSection>                                    
+        </apex:pageBlock>            
+    </apex:form>
+</apex:page>

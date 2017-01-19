@@ -1,0 +1,15 @@
+<project name="CI test" default="CI test" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property file="build.properties"/>
+    <property environment="env"/>
+      	
+    <target name="Deploy">
+	<sf:deploy
+			username="${sf.username}"
+			password="${sf.password}"
+			serverurl="${sf.serverurl}"
+			deployRoot="src"
+			logType = "Detail"
+			runAllTests="false" />
+  </target>
+</project>

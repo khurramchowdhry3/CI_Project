@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Email alert to Credit Assessment Team when new Credit Assessment record is created</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Credit Assessment Created</name>
+    <style>none</style>
+    <subject>Credit Assessment record {!Credit_Assessment__c.Name} has been created</subject>
+    <type>text</type>
+</EmailTemplate>

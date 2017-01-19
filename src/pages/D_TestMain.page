@@ -1,0 +1,4 @@
+<apex:page controller="D_TestMainController">
+    <apex:outputText value="{!str.Event_Amount__c}"></apex:outputText>
+    <apex:include pageName="D_TestMid" />
+</apex:page>

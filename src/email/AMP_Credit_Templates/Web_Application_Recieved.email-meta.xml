@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Notify group users about newly received web application.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Web Application Recieved</name>
+    <style>none</style>
+    <subject>New web application {!Opportunity.Name} is received</subject>
+    <type>text</type>
+</EmailTemplate>

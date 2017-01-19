@@ -1,0 +1,3 @@
+A new web lead: {!Lead.FirstName} {!Lead.LastName}, {!Lead.Company} has been added to the Unallocated Web Leads queue.
+
+To view the details of this lead in Salesforce, please click on the following link: {!Lead.Link}.

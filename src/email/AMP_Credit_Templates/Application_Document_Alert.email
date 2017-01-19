@@ -1,0 +1,69 @@
+{!Account.Salutation} {!Account.FirstName} {!Account.LastName}
+
+{!Account.LE_Building_Name__c}
+
+{!Account.LE_Street_Number__c} {!Account.LE_Street_Name__c}
+
+{!Account.LE_Address_Line_2__c}
+
+{!Account.LE_Address_Line_3__c}
+
+{!Account.00N26000000Jtab}
+
+{!Account.LE_Region__c}
+
+{!Account.LE_Postcode__c}
+
+{!Account.LE_Country__c}
+
+{!Today}
+
+Dear {!Account.Salutation} {!Account.LastName},
+
+YOUR APPLICATION DOCUMENTS - {!Opportunity.Application_ID2__c}
+
+Dear {!Account.Salutation} {!Account.LastName},
+
+Thank you for taking time to complete your loan application over the telephone with me. I am 
+
+delighted that we are able to help you with your requirements and I enclose your Application 
+
+Form which has been completed using the information you provided to me during our discussion.
+
+What you need to do next
+
+What you need to do next is really simple – we’ve kept it to three steps to make 
+
+your life easier:
+
+1. Thoroughly check the details on the Application Form.
+
+2. If you are happy that the details are correct simply sign your Application 
+
+Form and return it to me using the prepaid envelope. It is really important 
+
+that you use the envelope we have provided as it carries your unique 
+
+barcode which ensures we can process your application quickly.
+
+3. When returning your signed Application Form, please make sure you also 
+
+include the following documents – copies are fine: 
+
+a. Proof of residence
+
+b. 3 months of Business statements
+
+c. Tenancy agreement
+
+d. 3 months of Merchant statements
+
+If you have any questions, or if you find that any of your details are not correct, please call me on 
+
+{!Opportunity.OwnerPhone}.
+
+I look forward to receiving your documents.
+
+Yours sincerely, 
+
+{!Opportunity.OwnerFullName}

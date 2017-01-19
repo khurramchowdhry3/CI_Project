@@ -1,0 +1,10 @@
+<apex:page standardController="Operation__c" extensions="CRMS_ShowOperationDocumentController" >
+    <apex:iframe src="https://sharepoint.amp-creditech.com/sites/clientdocs/UK/Forms/AllItems.aspx?RootFolder=%2Fsites%2Fclientdocs%2FUK%2F{!Operation__c.Account__r.Name}_{!Operation__c.Account__r.Client_ID__c}%2F" 
+    rendered="{!isUK}"/>
+    <apex:iframe src="https://sharepoint.amp-creditech.com/sites/clientdocs/HK/Forms/AllItems.aspx?RootFolder=%2Fsites%2Fclientdocs%2FUK%2F{!Operation__c.Account__r.Name}_{!Operation__c.Account__r.Client_ID__c}%2F" 
+    rendered="{!isHK}"/>
+    <apex:iframe src="https://sharepoint.amp-creditech.com/sites/clientdocs/SG/Forms/AllItems.aspx?RootFolder=%2Fsites%2Fclientdocs%2FUK%2F{!Operation__c.Account__r.Name}_{!Operation__c.Account__r.Client_ID__c}%2F" 
+    rendered="{!isSG}"/>
+    <apex:iframe src="https://sharepoint.amp-creditech.com/sites/clientdocs/PH/Forms/AllItems.aspx?RootFolder=%2Fsites%2Fclientdocs%2FUK%2F{!Operation__c.Account__r.Name}_{!Operation__c.Account__r.Client_ID__c}%2F" 
+    rendered="{!isPH}"/>
+</apex:page>

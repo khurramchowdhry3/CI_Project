@@ -1,0 +1,11 @@
+<apex:page standardController="Additional_Debt__c" extensions="AMPSales_DelDebtController" action="{!DelDebt}" docType="html-5.0">
+  
+  <apex:form >
+      <apex:pageBlock tabStyle="Additional_Debt__c">               
+           <apex:pageBlockButtons >                
+                <apex:outputLink value="{!ReturnURL}" styleClass="btn" style="text-decoration:none;padding:4px;">Return to Previous Page</apex:outputLink>                                            
+           </apex:pageBlockButtons>
+           <apex:pageMessages ></apex:pageMessages>
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>

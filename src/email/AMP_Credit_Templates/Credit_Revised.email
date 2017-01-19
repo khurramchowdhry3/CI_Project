@@ -1,0 +1,8 @@
+Hi,
+
+Please find the updated loan details for {!Credit_Assessment__c.Opportunity__c}: 
+
+1. Loan Amount : {!Credit_Assessment__c.Requested_Loan_Amount__c}
+2. Loan Term :      {!Credit_Assessment__c.Requested_Loan_Term__c}
+
+Thank you

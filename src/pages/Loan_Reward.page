@@ -1,0 +1,505 @@
+<apex:page standardController="Program_Product_ASO__c" extensions="Loan_Reward_Controller"  docType="html-5.0"  tabStyle="Rewards_Set_up__tab">
+
+    <apex:includeScript value="https://code.jquery.com/jquery-2.1.4.min.js"/>
+    <apex:includeScript value="{!URLFOR($Resource.AMP_LoanManagment, 'js/LMS_JSLib.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.AMP_LoanManagment, 'css/LMDashboard_Events.css')}"/>    
+    <style>
+           table thead tr td {font-weight:bold; padding-bottom:10px; }
+           thead tr th div {text-align:center; padding: 20px 0;}
+           .required {border-left: 2px solid FireBrick;}    
+           a {text-decoration: none !important;}
+           .piped li input, .x-grid3-hd-ACTION_COLUMN, .x-grid3-col-ACTION_COLUMN {display:none !important;}
+           .x-grid3-col-NAME {   pointer-events: none !important;   cursor: default !important;}
+           body .bDetailBlock.bPageBlock {margin-bottom:0px;}
+           .pbBottomButtons .pbTitle,.pbHeader .pbTitle{display:none;}
+           .pbButtonb,.pbButton { text-align: center; }
+           
+           .listViewport .inlineEditWriteVisible .x-grid3-cell-inner,
+           .listViewport .inlineEditLockVisible .x-grid3-cell-inner { 
+               background:none !important;
+            }
+           .detailList .inlineEditLockOn, 
+           .detailList .inlineEditWriteOn {
+               background:none !important;
+           }
+           
+           
+        
+                table {max-width: 100%;}                
+                th {text-align: left;}                
+                .table {width: 100%; margin-bottom: 20px;}                
+                .table > thead > tr > th,
+                .table > tbody > tr > th,
+                .table > tfoot > tr > th,
+                .table > thead > tr > td,
+                .table > tbody > tr > td,
+                .table > tfoot > tr > td {
+                    padding: 8px;
+                    line-height: 1.428571429;
+                    vertical-align: top;
+                    border-top: 1px solid #ddd;
+                }
+                
+                .table > thead > tr > th {
+                    vertical-align: bottom;
+                    border-bottom: 2px solid #ddd;
+                }
+                
+                .table > caption + thead > tr:first-child > th,
+                .table > colgroup + thead > tr:first-child > th,
+                .table > thead:first-child > tr:first-child > th,
+                .table > caption + thead > tr:first-child > td,
+                .table > colgroup + thead > tr:first-child > td,
+                .table > thead:first-child > tr:first-child > td {
+                    border-top: 0;
+                }
+                
+                .table > tbody + tbody {
+                    border-top: 2px solid #ddd;
+                }
+                
+                .table .table {
+                    background-color: #fff;
+                }
+                
+                .table-condensed > thead > tr > th,
+                .table-condensed > tbody > tr > th,
+                .table-condensed > tfoot > tr > th,
+                .table-condensed > thead > tr > td,
+                .table-condensed > tbody > tr > td,
+                .table-condensed > tfoot > tr > td {
+                    padding: 5px;
+                }
+                
+                .table-bordered {
+                    border: 1px solid #ddd;
+                }
+                
+                .table-bordered > thead > tr > th,
+                .table-bordered > tbody > tr > th,
+                .table-bordered > tfoot > tr > th,
+                .table-bordered > thead > tr > td,
+                .table-bordered > tbody > tr > td,
+                .table-bordered > tfoot > tr > td {
+                    border: 1px solid #ddd;
+                }
+                
+                .table-bordered > thead > tr > th,
+                .table-bordered > thead > tr > td {
+                    border-bottom-width: 2px;
+                }
+                
+                .table-striped > tbody > tr:nth-child(odd) > td,
+                .table-striped > tbody > tr:nth-child(odd) > th {
+                    background-color: #eaeaea;
+                }
+                
+                .table-hover > tbody > tr:hover > td,
+                .table-hover > tbody > tr:hover > th {
+                    background-color: #f5f5f5;
+                }        
+          
+    </style>                       
+       
+    <apex:sectionHeader rendered="{!NOT(isNewOrEditRecord)}" title="Rewards Setup" subtitle="Home"/>      
+    <apex:sectionHeader rendered="{!AND(isNewOrEditRecord,disableAssociationDropdown)}" title="Rewards Setup" subtitle="Edit" />
+    <apex:sectionHeader rendered="{!AND(isNewOrEditRecord,NOT(disableAssociationDropdown))}" title="Rewards Setup" subtitle="New" />   
+
+    <apex:enhancedList type="Program_Product_ASO__c" height="600"  customizable="true" rendered="{!NOT(isNewOrEditRecord)}"/>
+   
+    <!-- Begin Form -->
+  <apex:form id="pageForm">
+      
+      <apex:outputPanel style="display:none;">
+             <apex:inputField value="{!c.Amount__c }" id="hiddenCommissionAmount" />
+             <apex:inputField value="{!i.Amount__c }" id="hiddenIncentiveAmount" />
+      </apex:outputPanel>        
+         
+      <apex:pageBlock rendered="{!isNewOrEditRecord}" mode="maindetail">          
+            <apex:pageMessages id="rewardcntrlmsgs" escape="false"></apex:pageMessages>          
+            <apex:pageBlock rendered="{!isNewOrEditRecord}"  mode="maindetail">
+         <apex:pageBlockButtons location="Top">                        
+              <apex:commandbutton action="{!newRecord}" value="Save"  onclick="return (isASOSelected())"/> 
+              <apex:commandbutton rendered="{!isNewOrEditRecord}" action="{!deleteRecord}" onclick="return confirm ('Are you sure you want to delete this reward?')" value="Delete" />
+              <apex:commandbutton action="{!cancel}" value="Cancel" />                    
+         </apex:pageBlockButtons>
+      </apex:pageBlock>     
+      <apex:pageBlockSection title="Selection">
+          <apex:pageBlockSectionItem >
+               <apex:outputLabel value="Program" for="progSelection"/> 
+                    <apex:selectList value="{!selectedProgramVal}" size="1" disabled="{!disableAssociationDropdown}" id="progSelection">                          
+                        <apex:actionSupport event="onchange" reRender="prodSelection,pageForm"/>
+                        <apex:selectOptions value="{!Programs}" /> 
+                    </apex:selectList>
+            </apex:pageBlockSectionItem>  
+          <apex:pageBlockSectionItem >
+               <apex:outputLabel value="Product" for="prodSelection"/> 
+                    <apex:selectList value="{!selectedPPVal}" size="1" disabled="{!disableAssociationDropdown}" id="prodSelection">  
+                        <apex:selectOptions value="{!Products}" /> 
+                    </apex:selectList>
+            </apex:pageBlockSectionItem>         
+      </apex:pageBlockSection>
+      </apex:pageBlock>
+    </apex:form>
+    <apex:form >
+      <apex:pageBlock rendered="{!AND(isNewOrEditRecord,disableAssociationDropdown)}"  mode="maindetail" id="Commission">
+          
+          <apex:pageBlockSection title="Commission Recipient">          
+          <apex:pageBlockSectionItem >
+              <apex:outputLabel value="Commission Type" for="commType"/>
+              <c:RequiredContainer fieldName="Commission Type">
+                <apex:inputField value="{!c.Type__c}" id="commType" onchange="showSplitSection(this)"/>
+              </c:RequiredContainer>    
+          </apex:pageBlockSectionItem>              
+          <apex:pageBlockSectionItem dataStyleClass="splitSection" dataStyle="display:none;" labelStyleClass="splitSection" labelStyle="display:none;">
+              <apex:outputLabel ></apex:outputLabel>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem dataStyleClass="splitSection" dataStyle="display:none;" labelStyleClass="splitSection" labelStyle="display:none;">
+              <apex:outputLabel value="Start %" for="splitStart"/>
+              <c:RequiredContainer fieldName="Start">
+                  <apex:inputField value="{!c.Split_Start__c }" id="splitStart"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem dataStyleClass="splitSection" dataStyle="display:none;" labelStyleClass="splitSection" labelStyle="display:none;">
+              <apex:outputLabel value="End %" for="splitEnd"/>
+              <c:RequiredContainer fieldName="End">
+                  <apex:inputField value="{!c.Split_End__c }" id="splitEnd"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+              <apex:outputLabel value="Calculation Method" for="commCalcMethod" /> 
+              <c:RequiredContainer fieldName="Calculation Method">
+                <apex:inputField value="{!c.Calculation_method__c}" onchange="amountInPercent(this)" id="commCalcMethod"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+              <apex:outputLabel value="Disburse Type" for="commDisbType" />
+              <c:RequiredContainer fieldName="Disburse Type">
+                <apex:inputField value="{!c.Disburse_Type__c}"/>
+              </c:RequiredContainer>              
+          </apex:pageBlockSectionItem>      
+          <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>          
+          <apex:pageBlockSectionItem > 
+              <apex:outputLabel value="Commission Amount in {!currencyISO}" for="commAmount" id="commAmountLabel"/>
+              <c:RequiredContainer fieldName="Commission Amount">
+                <apex:inputField value="{!c.Amount__c}" styleClass="currencyInput" id="commAmount" onchange="validateAmountInput(this)" />
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>              
+          </apex:pageBlockSection>
+                <apex:pageBlockButtons location="bottom" > 
+                    <apex:commandButton value="Add" action="{!save}" reRender="rewardcntrlmsgs,Commission,commList" oncomplete="splitValuesCalculate('Commission')">
+                        <apex:param name="rewardType" value="Commission" assignTo="{!rewardType}"/>
+                    </apex:commandButton>
+                </apex:pageBlockButtons>
+     </apex:pageBlock> 
+      </apex:form>
+      <apex:form >    
+      <apex:pageBlock rendered="{!AND(isNewOrEditRecord,disableAssociationDropdown)}"  mode="maindetail" id="Incentive">
+          <apex:pageBlockSection title="Incentive Recipient">          
+          <apex:pageBlockSectionItem >
+              <apex:outputLabel value="Incentive Type" for="incType" />
+              <c:RequiredContainer fieldName="Incentive Type">
+                <apex:inputField value="{!i.Type__c}" id="incType" onchange="showSplitSectionIncentive(this)"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>              
+          <apex:pageBlockSectionItem dataStyleClass="splitSectionI" dataStyle="display:none;" labelStyleClass="splitSectionI" labelStyle="display:none;"><apex:outputLabel ></apex:outputLabel></apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem dataStyleClass="splitSectionI" dataStyle="display:none;" labelStyleClass="splitSectionI" labelStyle="display:none;">
+              <apex:outputLabel value="Start %" for="splitStartI"/>
+              <c:RequiredContainer fieldName="Start">
+                  <apex:inputField value="{!i.Split_Start__c }" id="splitStartI"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem dataStyleClass="splitSectionI" dataStyle="display:none;" labelStyleClass="splitSectionI" labelStyle="display:none;">
+              <apex:outputLabel value="End %" for="splitEndI"/>
+              <c:RequiredContainer fieldName="End">
+                  <apex:inputField value="{!i.Split_End__c }" id="splitEndI"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+              <apex:outputLabel value="Calculation Method" for="incCalcMethod" />
+              <c:RequiredContainer fieldName="Calculation Method">
+                  <apex:inputField value="{!i.Calculation_method__c}" onchange="amountInPercentIncentive(this)" id="incCalcMethod"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+              <apex:outputLabel value="Disburse Type" for="incDisbType" /> 
+              <c:RequiredContainer fieldName="Disburse Type">
+                  <apex:inputField value="{!i.Disburse_Type__c}"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>                                 
+          <apex:pageBlockSectionItem >
+              <apex:outputLabel value="Sales Role" for="incSalesRole" />
+              <c:RequiredContainer fieldName="Sales Role">
+                <apex:inputField value="{!i.Sales_Role__c}"/>
+              </c:RequiredContainer>                  
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >                
+              <apex:outputLabel value="Incentive Amount in {!currencyISO}" for="incAmount" id="incAmountLabel"/> 
+              <c:RequiredContainer fieldName="Incentive Amount">
+                  <apex:inputField value="{!i.Amount__c}" styleClass="currencyInput" id="incAmount" onchange="validateIncAmountInput(this)"/>
+              </c:RequiredContainer>
+          </apex:pageBlockSectionItem>           
+          </apex:pageBlockSection>
+                <apex:pageBlockButtons location="bottom" > 
+                    <apex:commandButton value="Add" action="{!save}" reRender="rewardcntrlmsgs,Incentive,incList" oncomplete="splitValuesCalculate('Incentive')">
+                        <apex:param name="rewardType" value="Incentive" assignTo="{!rewardType}"/>
+                    </apex:commandButton>
+                </apex:pageBlockButtons>
+     </apex:pageBlock> 
+    </apex:form>
+   <apex:form >
+      <apex:pageBlock rendered="{!AND(isNewOrEditRecord,disableAssociationDropdown)}" id="commList"  mode="maindetail">
+          <apex:pageBlockSection columns="1" title="Commission Summary" >
+                     <apex:variable value="{!0}" var="count"/>                 
+                     <apex:dataTable value="{!commList}" var="cs" style="width:100%;text-align:center;" border="" cellpadding="5px" rowClasses="odd,even" styleClass="table"> 
+                         <apex:column value="{!cs.Type__c}"> <apex:facet name="header">Type</apex:facet> </apex:column>
+                         <apex:column value="{!cs.Split_Start__c}"> <apex:facet name="header">Start</apex:facet> </apex:column>
+                         <apex:column value="{!cs.Split_End__c}"> <apex:facet name="header">End</apex:facet> </apex:column>
+                         <apex:column value="{!cs.Calculation_method__c}"> <apex:facet name="header">Calculation Method</apex:facet> </apex:column>
+                         <apex:column value="{!cs.Disburse_Type__c}"> <apex:facet name="header">Disbursal Type</apex:facet> </apex:column>
+                         <apex:column > 
+                             <apex:facet name="header">Amount</apex:facet>
+                             <apex:outputText value="{0, number, ###,###,###,###.00}{1}">
+                                 <apex:param value="{!cs.Amount__c}"/>
+                                 <apex:param value="{!IF(cs.Calculation_method__c == 'Percentage', '%', '')}" />
+                             </apex:outputText>
+                         </apex:column>                        
+                         <apex:column >
+                             <apex:facet name="header">Action</apex:facet> 
+                             <apex:commandButton immediate="true" value="Remove" action="{!delRowComm}" rerender="commList,rewardcntrlmsgs,Commission">                                       
+                                <apex:param name="contIdParam" value="{!count}" assignTo="{!countIdChosen}"/>
+                             </apex:commandButton>
+                             <apex:variable var="count" value="{!count+ 1}"/>
+                         </apex:column>   
+                     </apex:dataTable>              
+          </apex:pageBlockSection>
+      </apex:pageBlock>        
+      <apex:pageBlock rendered="{!AND(isNewOrEditRecord,disableAssociationDropdown)}" id="incList"  mode="maindetail">
+          <apex:pageBlockSection columns="1" title="Incentive Summary">
+                     <apex:variable value="{!0}" var="count"/>                 
+                     <apex:dataTable value="{!incList}" var="ic" style="width:100%;text-align:center;" border="" cellpadding="5px" rowClasses="odd,even" styleClass="table"> 
+                         <apex:column value="{!ic.Type__c}"> <apex:facet name="header">Type</apex:facet> </apex:column>
+                         <apex:column value="{!ic.Split_Start__c}"> <apex:facet name="header">Start</apex:facet> </apex:column>
+                         <apex:column value="{!ic.Split_End__c}"> <apex:facet name="header">End</apex:facet> </apex:column>
+                         <apex:column value="{!ic.Calculation_method__c}"> <apex:facet name="header">Calculation Method</apex:facet> </apex:column>
+                         <apex:column value="{!ic.Disburse_Type__c}"> <apex:facet name="header">Disbursal Type</apex:facet> </apex:column>
+                         <apex:column value="{!ic.Sales_Role__c}"> <apex:facet name="header">Sales Role</apex:facet> </apex:column>
+                         <apex:column > 
+                             <apex:facet name="header">Amount</apex:facet> 
+                             <apex:outputText value="{0, number, ###,###,###,###.00}{1}">
+                                 <apex:param value="{!ic.Amount__c}"/>
+                                 <apex:param value="{!IF(ic.Calculation_method__c == 'Percentage', '%', '')}" />
+                             </apex:outputText>
+                         </apex:column>                        
+                         <apex:column >
+                             <apex:facet name="header">Action</apex:facet> 
+                             <apex:commandButton immediate="true" value="Remove" action="{!delRowInc}" rerender="rewardcntrlmsgs,Incentive,incList">                                       
+                                           <apex:param name="contIdParam" value="{!count}" assignTo="{!countIdChosen}"/>
+                             </apex:commandButton>
+                             <apex:variable var="count" value="{!count+ 1}"/>
+                         </apex:column>   
+                     </apex:dataTable>   
+              
+          </apex:pageBlockSection> 
+          
+          <apex:pageBlockSection title="System Information">
+            <apex:pageBlockSectionItem ><apex:outputLabel value="Created By: "/><apex:outputField value="{!r.CreatedByID}"/></apex:pageBlockSectionItem> 
+            <apex:pageBlockSectionItem ><apex:outputLabel value="Last Modified By : "/><apex:outputField value="{!r.LastModifiedById}"/></apex:pageBlockSectionItem> 
+            <apex:pageBlockSectionItem ><apex:outputLabel value="Created Date: "/><apex:outputField value="{!r.CreatedDate}"/></apex:pageBlockSectionItem> 
+            <apex:pageBlockSectionItem ><apex:outputLabel value="Last Modified Date: "/><apex:outputField value="{!r.LastModifiedDate}"/></apex:pageBlockSectionItem> 
+        </apex:pageBlockSection> 
+        
+        <apex:pageBlockButtons location="bottom">                        
+              <apex:commandbutton action="{!newRecord}" value="Save"  onclick="return (isASOSelected())"/> 
+              <apex:commandbutton rendered="{!isNewOrEditRecord}" action="{!deleteRecord}" onclick="return confirm ('Are you sure you want to delete this reward?')" value="Delete" />
+              <apex:commandbutton action="{!cancel}" value="Cancel" />                    
+         </apex:pageBlockButtons>  
+
+      </apex:pageBlock>
+  </apex:form>
+   <script>function setFocusOnLoad() {}</script>
+   <script>
+       function validateAmountInput(el)
+       {
+            var amount = $(el).val();
+            if (isNaN(amount))
+            {
+                $(el).get(0).setCustomValidity('Please enter a valid number');
+            }
+            else if( $("[id$=commCalcMethod]").val() == 'Percentage' && Number(amount) > 100)
+            {
+               $(el).get(0).setCustomValidity('Value should not be over 100');               
+            }
+            else if( $("[id$=commCalcMethod]").val() == 'Percentage' && Number(amount) < 0)
+            {
+               $(el).get(0).setCustomValidity('Value should not be under 0');               
+            }
+            else
+            {
+                $(el).get(0).setCustomValidity('');
+            }
+       
+            $(el).val(Number(amount).toLocaleString("en", { minimumFractionDigits:2, maximumFractionDigits:2}));             
+       }
+       function showSplitSection(el) {
+           var selected = $(el).val();
+            if(selected=='Split')
+            {
+                $(".splitSection").show();
+                $("[id$=splitStart]").parent().addClass('xwRequiredInput');
+                $("[id$=splitEnd]").parent().addClass('xwRequiredInput');
+                $("[id$=splitStart]").attr('required', true);
+                $("[id$=splitEnd]").attr('required', true);
+            }
+            else
+            {        
+                $(".splitSection").hide();
+                $("[id$=splitStart]").parent().removeClass('xwRequiredInput');
+                $("[id$=splitEnd]").parent().removeClass('xwRequiredInput');
+                $("[id$=splitStart]").removeAttr('required');
+                $("[id$=splitEnd]").removeAttr('required');
+                $("[id$=splitStart]").val('');
+                $("[id$=splitEnd]").val('');
+            }
+       }        
+       
+       function amountInPercent(el) {
+           var selected = $(el).val();
+            if(selected=='Fixed')
+            {
+                $("[id$=commAmountLabel]").html("Commission Amount in {!currencyISO}");                
+            }else
+            {        
+                $("[id$=commAmountLabel]").html("Commission Amount in %");                
+            }
+           
+           $("[id$=commAmount]").val('');
+           
+       }    
+    
+       function showSplitSectionIncentive(el) {
+           var selected = $(el).val();
+            if(selected=='Split')
+            {
+                $(".splitSectionI").show();
+                $("[id$=splitStartI]").parent().addClass('xwRequiredInput');
+                $("[id$=splitEndI]").parent().addClass('xwRequiredInput');
+                $("[id$=splitStartI]").attr('required', true);
+                $("[id$=splitEndI]").attr('required', true);
+            }
+            else
+            {        
+                $(".splitSectionI").hide();
+                $("[id$=splitStartI]").parent().removeClass('xwRequiredInput');
+                $("[id$=splitEndI]").parent().removeClass('xwRequiredInput');
+                $("[id$=splitStartI]").removeAttr('required');
+                $("[id$=splitEndI]").removeAttr('required');
+                $("[id$=splitStartI]").val('');
+                $("[id$=splitEndI]").val('');
+            }
+       }
+    
+       function amountInPercentIncentive(el) {
+           var selected = $(el).val();
+            if(selected=='Fixed'){                
+                $("[id$=incAmountLabel]").html("Commission Amount in {!currencyISO}");
+            }else{        
+                $("[id$=incAmountLabel]").html("Commission Amount in %");
+            }
+           
+           $("[id$=incAmount]").val('');
+       } 
+    
+        function validateIncAmountInput(el)
+       {
+            var amount = $(el).val();
+           
+            if (isNaN(amount))
+            {                
+                $(el).get(0).setCustomValidity('Please enter a valid number');
+            }
+            else if( $("[id$=incCalcMethod]").val() == 'Percentage' && Number(amount) > 100)
+            {
+               $(el).get(0).setCustomValidity('Value should not be over 100');               
+            }
+            else
+            {
+                $(el).get(0).setCustomValidity('');
+            }
+       
+           $(el).val(Number(amount).toLocaleString("en", { minimumFractionDigits:2, maximumFractionDigits:2}));
+           
+       }
+    
+    function isASOSelected(){
+        var isDisableAssociationDropdown =  {!disableAssociationDropdown};
+        var ProgramProdASO = {!IF(selectedPPVal == null, "''", selectedPPVal)};
+        if(ProgramProdASO == ''  && isDisableAssociationDropdown != true){
+            alert('Please select a Program Product Combination' + ProgramProdASO);
+            return false;
+        }
+        return true;
+    }
+    
+    function splitValuesCalculate(rewardType)
+    {
+        if(rewardType == 'Commission')
+        {
+            $("[id$=splitStart]").change(function(){
+               if(!isNaN($("[id$=splitStart]").val()))
+                   $("[id$=splitEnd]").val(100 - $("[id$=splitStart]").val());
+            });
+            $("[id$=splitEnd]").change(function(){
+               if(!isNaN($("[id$=splitEnd]").val()))
+                   $("[id$=splitStart]").val(100 - $("[id$=splitEnd]").val());
+            });
+        }
+        if(rewardType == 'Incentive')
+        {
+            $("[id$=splitStartI]").change(function(){
+               if(!isNaN($("[id$=splitStartI]").val()))
+                   $("[id$=splitEndI]").val(100 - $("[id$=splitStartI]").val());
+            });
+            $("[id$=splitEndI]").change(function(){
+               if(!isNaN($("[id$=splitEndI]").val()))
+                   $("[id$=splitStartI]").val(100 - $("[id$=splitEndI]").val());
+            });
+        }
+        
+        showSplitSection($("[id$=commType]"));
+        showSplitSectionIncentive($("[id$=incType]"));
+    }
+       
+    
+    $(document).ready(function(){
+            
+        //$(".currencyInput").after('<div class="currency">'+'{!r.Program__r.CurrencyISOCode}'+ '</div>');
+        //$(".currencyInput").number(true,2);
+        
+        $("#commissionAmount").change(function(){
+           $("[id$=hiddenCommissionAmount]").val($(this).val());
+        });
+        $("#incentiveAmount").change(function(){
+           $("[id$=hiddenIncentiveAmount]").val($(this).val());
+        });
+  
+        splitValuesCalculate('Commission');
+        splitValuesCalculate('Incentive');
+    })
+</script>      
+ <script>
+    /*! jQuery number 2.1.3 (c) github.com/teamdf/jquery-number | opensource.teamdf.com/license */
+(function(h){function r(f,a){if(this.createTextRange){var c=this.createTextRange();c.collapse(true);c.moveStart("character",f);c.moveEnd("character",a-f);c.select()}else if(this.setSelectionRange){this.focus();this.setSelectionRange(f,a)}}function s(f){var a=this.value.length;f=f.toLowerCase()=="start"?"Start":"End";if(document.selection){a=document.selection.createRange();var c;c=a.duplicate();c.expand("textedit");c.setEndPoint("EndToEnd",a);c=c.text.length-a.text.length;a=c+a.text.length;return f==
+"Start"?c:a}else if(typeof this["selection"+f]!="undefined")a=this["selection"+f];return a}var q={codes:{188:44,109:45,190:46,191:47,192:96,220:92,222:39,221:93,219:91,173:45,187:61,186:59,189:45,110:46},shifts:{96:"~",49:"!",50:"@",51:"#",52:"$",53:"%",54:"^",55:"&",56:"*",57:"(",48:")",45:"_",61:"+",91:"{",93:"}",92:"|",59:":",39:'"',44:"<",46:">",47:"?"}};h.fn.number=function(f,a,c,k){k=typeof k==="undefined"?",":k;c=typeof c==="undefined"?".":c;a=typeof a==="undefined"?0:a;var j="\\u"+("0000"+
+c.charCodeAt(0).toString(16)).slice(-4),o=RegExp("[^"+j+"0-9]","g"),p=RegExp(j,"g");if(f===true)return this.is("input:text")?this.on({"keydown.format":function(b){var d=h(this),e=d.data("numFormat"),g=b.keyCode?b.keyCode:b.which,m="",i=s.apply(this,["start"]),n=s.apply(this,["end"]),l="";l=false;if(q.codes.hasOwnProperty(g))g=q.codes[g];if(!b.shiftKey&&g>=65&&g<=90)g+=32;else if(!b.shiftKey&&g>=69&&g<=105)g-=48;else if(b.shiftKey&&q.shifts.hasOwnProperty(g))m=q.shifts[g];if(m=="")m=String.fromCharCode(g);
+if(g!==8&&m!=c&&!m.match(/[0-9]/)){d=b.keyCode?b.keyCode:b.which;if(d==46||d==8||d==9||d==27||d==13||(d==65||d==82)&&(b.ctrlKey||b.metaKey)===true||(d==86||d==67)&&(b.ctrlKey||b.metaKey)===true||d>=35&&d<=39)return;b.preventDefault();return false}if(i==0&&n==this.value.length||d.val()==0)if(g===8){i=n=1;this.value="";e.init=a>0?-1:0;e.c=a>0?-(a+1):0;r.apply(this,[0,0])}else if(m===c){i=n=1;this.value="0"+c+Array(a+1).join("0");e.init=a>0?1:0;e.c=a>0?-(a+1):0}else{if(this.value.length===0){e.init=
+a>0?-1:0;e.c=a>0?-a:0}}else e.c=n-this.value.length;if(a>0&&m==c&&i==this.value.length-a-1){e.c++;e.init=Math.max(0,e.init);b.preventDefault();l=this.value.length+e.c}else if(m==c){e.init=Math.max(0,e.init);b.preventDefault()}else if(a>0&&g==8&&i==this.value.length-a){b.preventDefault();e.c--;l=this.value.length+e.c}else if(a>0&&g==8&&i>this.value.length-a){if(this.value==="")return;if(this.value.slice(i-1,i)!="0"){l=this.value.slice(0,i-1)+"0"+this.value.slice(i);d.val(l.replace(o,"").replace(p,
+c))}b.preventDefault();e.c--;l=this.value.length+e.c}else if(g==8&&this.value.slice(i-1,i)==k){b.preventDefault();e.c--;l=this.value.length+e.c}else if(a>0&&i==n&&this.value.length>a+1&&i>this.value.length-a-1&&isFinite(+m)&&!b.metaKey&&!b.ctrlKey&&!b.altKey&&m.length===1){this.value=l=n===this.value.length?this.value.slice(0,i-1):this.value.slice(0,i)+this.value.slice(i+1);l=i}l!==false&&r.apply(this,[l,l]);d.data("numFormat",e)},"keyup.format":function(b){var d=h(this),e=d.data("numFormat");b=b.keyCode?
+b.keyCode:b.which;var g=s.apply(this,["start"]);if(!(this.value===""||(b<48||b>57)&&(b<96||b>105)&&b!==8)){d.val(d.val());if(a>0)if(e.init<1){g=this.value.length-a-(e.init<0?1:0);e.c=g-this.value.length;e.init=1;d.data("numFormat",e)}else if(g>this.value.length-a&&b!=8){e.c++;d.data("numFormat",e)}d=this.value.length+e.c;r.apply(this,[d,d])}},"paste.format":function(b){var d=h(this),e=b.originalEvent,g=null;if(window.clipboardData&&window.clipboardData.getData)g=window.clipboardData.getData("Text");
+else if(e.clipboardData&&e.clipboardData.getData)g=e.clipboardData.getData("text/plain");d.val(g);b.preventDefault();return false}}).each(function(){var b=h(this).data("numFormat",{c:-(a+1),decimals:a,thousands_sep:k,dec_point:c,regex_dec_num:o,regex_dec:p,init:false});this.value!==""&&b.val(b.val())}):this.each(function(){var b=h(this),d=+b.text().replace(o,"").replace(p,".");b.number(!isFinite(d)?0:+d,a,c,k)});return this.text(h.number.apply(window,arguments))};var t=null,u=null;if(h.isPlainObject(h.valHooks.text)){if(h.isFunction(h.valHooks.text.get))t=
+h.valHooks.text.get;if(h.isFunction(h.valHooks.text.set))u=h.valHooks.text.set}else h.valHooks.text={};h.valHooks.text.get=function(f){var a=h(f).data("numFormat");if(a){if(f.value==="")return"";f=+f.value.replace(a.regex_dec_num,"").replace(a.regex_dec,".");return""+(isFinite(f)?f:0)}else if(h.isFunction(t))return t(f)};h.valHooks.text.set=function(f,a){var c=h(f).data("numFormat");if(c)return f.value=h.number(a,c.decimals,c.dec_point,c.thousands_sep);else if(h.isFunction(u))return u(f,a)};h.number=
+function(f,a,c,k){k=typeof k==="undefined"?",":k;c=typeof c==="undefined"?".":c;a=!isFinite(+a)?0:Math.abs(a);var j="\\u"+("0000"+c.charCodeAt(0).toString(16)).slice(-4),o="\\u"+("0000"+k.charCodeAt(0).toString(16)).slice(-4);f=(f+"").replace(".",c).replace(RegExp(o,"g"),"").replace(RegExp(j,"g"),".").replace(RegExp("[^0-9+-Ee.]","g"),"");f=!isFinite(+f)?0:+f;j="";j=function(p,b){var d=Math.pow(10,b);return""+Math.round(p*d)/d};j=(a?j(f,a):""+Math.round(f)).split(".");if(j[0].length>3)j[0]=j[0].replace(/\B(?=(?:\d{3})+(?!\d))/g,
+k);if((j[1]||"").length<a){j[1]=j[1]||"";j[1]+=Array(a-j[1].length+1).join("0")}return j.join(c)}})(jQuery);
+    </script>
+                   
+</apex:page>

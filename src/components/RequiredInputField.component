@@ -1,0 +1,26 @@
+<apex:component >
+    <style>
+          .errorMsgCustom {color:#d74c3b;}
+          .errorCustom {border: 2px solid #c00;}
+          .requiredBlockCustom { background-color: #c00; position: absolute; left: -4px; width: 3px; top: 1px; bottom: 1px; }
+          .requiredInputCustom { position: relative; height: 100%; }
+          .dummy { }
+    </style>
+    <apex:attribute name="ErrorMessage" type="String" required="true" description="Error message to be displayed" />
+    <apex:attribute name="InputObject" type="SObject" required="true" description="Input object"/>
+    <apex:attribute name="InputField" type="String" required="true" description="Input field"/>
+    <apex:attribute name="onchange" type="String" description="name of JS function to call for onchange event" />
+    <apex:attribute name="styleClass" type="String" description="CSS class" />
+    <apex:outputPanel layout="block" id="requiredInputFieldOutermostDiv">
+        <apex:outputPanel layout="block" styleClass="requiredInputCustom" id="requiredInputFieldDiv">
+            <apex:outputPanel layout="block" styleClass="requiredBlockCustom" />
+            <apex:inputField value="{!InputObject[InputField]}" 
+                             id="requiredInputField" 
+                             styleClass="{!IF(LEN(ErrorMessage)!=0, 'errorCustom', 'dummy') + IF(styleClass != null, ',' + styleclass, '')}" 
+                             onchange="{!onchange}"/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!LEN(ErrorMessage)!=0}" styleClass="errorMsgCustom" layout="block" id="requiredInputFieldErrorMsgDiv">
+            <strong>Error:</strong>&nbsp;{!ErrorMessage}
+        </apex:outputPanel>
+    </apex:outputPanel>
+</apex:component>
