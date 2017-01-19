@@ -9,7 +9,7 @@
  * @author Khurram Shahzad (Sr. Software Engineer .at. XoomWorks) <a href="http://www.xoomworks.com/">XoomWorks</a>
  * @created 2016
  * 
- * Send Email Alerts to Users.
+ * Send Email Alerts to Users from Salesforce.
  *
  */ 
  
